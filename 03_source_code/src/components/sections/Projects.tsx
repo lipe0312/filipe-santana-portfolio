@@ -85,7 +85,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="px-6 py-24 relative">
+    <section id="projects" ref={sectionRef} className="px-6 py-24 relative bg-alabaster">
       <div
         ref={glowRef}
         aria-hidden="true"
@@ -96,10 +96,8 @@ export default function Projects() {
           opacity: 0,
           transition: "opacity 300ms ease-out",
           background:
-            "radial-gradient(200px circle at var(--glow-x, 0px) var(--glow-y, 0px), rgba(0,0,0,0.03), transparent 70%)",
+            "radial-gradient(200px circle at var(--glow-x) var(--glow-y), rgba(0,0,0,0.035), transparent 70%)",
           zIndex: 0,
-          "--glow-x": "0px",
-          "--glow-y": "0px",
         } as CSSProperties}
       />
       <div className="max-w-[1200px] mx-auto relative" style={{ zIndex: 1 }}>
@@ -314,7 +312,7 @@ function ProjectCard({
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="font-mono text-[0.75rem] tablet:text-[0.8125rem] bg-indigo-50 text-indigo-700 rounded-md px-2.5 py-1"
+                className="font-mono text-[0.75rem] tablet:text-[0.8125rem] bg-zinc-100 text-zinc-800 border border-zinc-200 rounded-md px-2.5 py-1"
               >
                 {tech}
               </span>

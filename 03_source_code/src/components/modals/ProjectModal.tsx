@@ -152,7 +152,7 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                         {project.techStack.map((tech) => (
                           <span
                             key={tech}
-                            className="font-mono text-[0.75rem] bg-indigo-50 text-indigo-700 rounded-md px-2.5 py-1"
+                            className="font-mono text-[0.75rem] bg-zinc-100 text-zinc-800 border border-zinc-200 rounded-md px-2.5 py-1"
                           >
                             {tech}
                           </span>

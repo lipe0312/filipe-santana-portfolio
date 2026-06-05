@@ -15,6 +15,32 @@ const config: Config = {
         "text-primary": "var(--color-text-primary)",
         "text-secondary": "var(--color-text-secondary)",
         "accent": "var(--color-accent)",
+        "pearl": "#FCFCFC",
+        "alabaster": "#F9FAFB",
+        "soft-slate": "#F1F5F9",
+        "zinc-mist": "#F4F4F5",
+      },
+      keyframes: {
+        "blob-a": {
+          "0%": { transform: "translate(0%, 0%)" },
+          "50%": { transform: "translate(12%, -18%)" },
+          "100%": { transform: "translate(-8%, 10%)" },
+        },
+        "blob-b": {
+          "0%": { transform: "translate(0%, 0%)" },
+          "50%": { transform: "translate(-14%, 12%)" },
+          "100%": { transform: "translate(6%, -9%)" },
+        },
+        "blob-c": {
+          "0%": { transform: "translate(0%, 0%)" },
+          "50%": { transform: "translate(10%, 16%)" },
+          "100%": { transform: "translate(-12%, -6%)" },
+        },
+      },
+      animation: {
+        "blob-slow": "blob-a 24s ease-in-out infinite alternate",
+        "blob-mid": "blob-b 31s ease-in-out infinite alternate",
+        "blob-fast": "blob-c 18s ease-in-out infinite alternate",
       },
       borderRadius: {
         "card": "var(--radius-card)",

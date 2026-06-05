@@ -41,10 +41,28 @@ body {
   transform: translateY(0);
 }
 
+.line-reveal {
+  color: #D4D4D8;
+  transition: color 400ms ease-out;
+}
+.line-reveal.is-visible {
+  color: #18181B;
+}
+
+.blob-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
     transform: none;
     transition: none;
   }
+  .blob-bg * { animation: none !important; opacity: 0 !important; }
+  .line-reveal { color: #18181B !important; transition: none !important; }
 }

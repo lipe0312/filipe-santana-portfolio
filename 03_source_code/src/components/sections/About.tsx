@@ -212,11 +212,42 @@ export default function About() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Line-reveal IntersectionObserver for Diferencial and Beyond Code paragraphs
+  useEffect(function() {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const els = section.querySelectorAll('.line-reveal');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      els.forEach(function(el) { el.classList.add('is-visible'); });
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      els.forEach(function(el) { el.classList.add('is-visible'); });
+      return;
+    }
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.8 });
+
+    els.forEach(function(el) { observer.observe(el); });
+
+    return function() { observer.disconnect(); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <section
       id="about"
       ref={sectionRef as RefObject<HTMLElement>}
-      className="px-6 py-24"
+      className="px-6 py-24 bg-soft-slate"
     >
       <div className="max-w-5xl mx-auto">
 
@@ -346,18 +377,18 @@ export default function About() {
             What I Actually Bring
           </h3>
           <div className="space-y-6">
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "0ms" }}>
               Here is what I actually bring to a team. I learn fast. When a project demands a framework I have never touched or a domain I have never worked in, I do not stall and I do not make excuses. I absorb it, apply it, and start delivering. That adaptability is what lets me move across layers most engineers never cross, from embedded firmware to applied AI to the web interface that ties it all together.
-            </p>
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            </span>
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "60ms" }}>
               But raw technical range means nothing if you cannot communicate it. I can stand in front of a room and translate a dense technical architecture into language a business leader, an investor, or a teammate actually understands. I have spent time teaching, presenting, and explaining complex systems to people who do not live in code, and I know how to bridge the gap between what is technically true and what a decision maker needs to hear.
-            </p>
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            </span>
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "120ms" }}>
               What truly defines how I work is simpler than any skill on a list. I do not quit. Hand me a problem that looks impossible and I will keep pushing until it is solved, no matter what it takes. I carry a relentless drive to grow and improve, but I carry it with humility and integrity. I am confident in what I can build, honest about what I am still learning, and reliable when it matters most.
-            </p>
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            </span>
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "180ms" }}>
               If you need someone who will own a hard problem from the first circuit to the final deployment and refuse to walk away until it works, that is exactly who I am.
-            </p>
+            </span>
           </div>
         </div>
 
@@ -371,15 +402,15 @@ export default function About() {
             Beyond Code
           </h3>
           <div className="space-y-6">
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "0ms" }}>
               When I step away from the screen, you will most likely find me close to the ocean. There is something about the coastline that genuinely recharges me, and living in Salvador means I would never trade that. I am an extrovert at heart. I love meeting new people and connecting easily, even if I might seem a little reserved at first. My favorite moments are simple ones: good food at a great restaurant, traveling somewhere new, and spending time with family.
-            </p>
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            </span>
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "60ms" }}>
               Sports are a big part of who I am. I am a proud and devoted Esporte Clube Bahia supporter, the kind who shows up to games and is fully convinced he brings luck. I balance watching basketball (a lifelong Steph Curry fan) and following the NFL for the sheer intensity of it, with actually playing: soccer and gym keep me disciplined and grounded, even if a good meal occasionally wins the negotiation.
-            </p>
-            <p className="text-text-secondary font-sans text-lg leading-relaxed">
+            </span>
+            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "120ms" }}>
               At the end of the day, I am someone who collects experiences more than things. New places, new people, new problems worth solving — that is what drives me both inside and outside the code.
-            </p>
+            </span>
           </div>
         </div>
 
