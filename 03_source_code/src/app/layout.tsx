@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/TopBar";
+import GlobalCursor from "@/components/GlobalCursor";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -20,6 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable}`}>
       <body className="font-sans">
+        {/* Film grain — fixed viewport overlay, cinematic texture across all sections */}
+        <div aria-hidden="true" className="grain-overlay" />
+        <GlobalCursor />
         <TopBar />
         {children}
       </body>

@@ -16,8 +16,8 @@ const config: Config = {
         "text-secondary": "var(--color-text-secondary)",
         "accent": "var(--color-accent)",
         "pearl": "#FCFCFC",
-        "alabaster": "#F9FAFB",
-        "soft-slate": "#F1F5F9",
+        "alabaster": "#DDE3EA",
+        "soft-slate": "#CBD5E1",
         "zinc-mist": "#F4F4F5",
       },
       keyframes: {

@@ -236,7 +236,7 @@ export default function About() {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.8 });
+    }, { threshold: 0.3 });
 
     els.forEach(function(el) { observer.observe(el); });
 
@@ -247,9 +247,21 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef as RefObject<HTMLElement>}
-      className="px-6 py-24 bg-soft-slate"
+      className="bg-white relative overflow-hidden px-6 py-24"
     >
-      <div className="max-w-5xl mx-auto">
+      {/* Blob background — slow-sweeping ambient wave */}
+      <div aria-hidden="true" className="blob-bg">
+        <div
+          className="blob-1 absolute rounded-full bg-zinc-200 will-change-transform"
+          style={{ width: "700px", height: "700px", top: "-40px", left: "-80px", opacity: 0.85, filter: "blur(120px)" }}
+        />
+        <div
+          className="blob-2 absolute rounded-full bg-indigo-100 will-change-transform"
+          style={{ width: "600px", height: "600px", bottom: "-30px", right: "-60px", opacity: 0.75, filter: "blur(120px)" }}
+        />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto">
 
         {/* Section header */}
         <div className="mb-16">
@@ -377,16 +389,16 @@ export default function About() {
             What I Actually Bring
           </h3>
           <div className="space-y-6">
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "0ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "600ms" }}>
               Here is what I actually bring to a team. I learn fast. When a project demands a framework I have never touched or a domain I have never worked in, I do not stall and I do not make excuses. I absorb it, apply it, and start delivering. That adaptability is what lets me move across layers most engineers never cross, from embedded firmware to applied AI to the web interface that ties it all together.
             </span>
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "60ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "680ms" }}>
               But raw technical range means nothing if you cannot communicate it. I can stand in front of a room and translate a dense technical architecture into language a business leader, an investor, or a teammate actually understands. I have spent time teaching, presenting, and explaining complex systems to people who do not live in code, and I know how to bridge the gap between what is technically true and what a decision maker needs to hear.
             </span>
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "120ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "760ms" }}>
               What truly defines how I work is simpler than any skill on a list. I do not quit. Hand me a problem that looks impossible and I will keep pushing until it is solved, no matter what it takes. I carry a relentless drive to grow and improve, but I carry it with humility and integrity. I am confident in what I can build, honest about what I am still learning, and reliable when it matters most.
             </span>
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "180ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "840ms" }}>
               If you need someone who will own a hard problem from the first circuit to the final deployment and refuse to walk away until it works, that is exactly who I am.
             </span>
           </div>
@@ -402,19 +414,25 @@ export default function About() {
             Beyond Code
           </h3>
           <div className="space-y-6">
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "0ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "600ms" }}>
               When I step away from the screen, you will most likely find me close to the ocean. There is something about the coastline that genuinely recharges me, and living in Salvador means I would never trade that. I am an extrovert at heart. I love meeting new people and connecting easily, even if I might seem a little reserved at first. My favorite moments are simple ones: good food at a great restaurant, traveling somewhere new, and spending time with family.
             </span>
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "60ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "680ms" }}>
               Sports are a big part of who I am. I am a proud and devoted Esporte Clube Bahia supporter, the kind who shows up to games and is fully convinced he brings luck. I balance watching basketball (a lifelong Steph Curry fan) and following the NFL for the sheer intensity of it, with actually playing: soccer and gym keep me disciplined and grounded, even if a good meal occasionally wins the negotiation.
             </span>
-            <span className="line-reveal block font-sans text-lg leading-relaxed" style={{ transitionDelay: "120ms" }}>
+            <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "760ms" }}>
               At the end of the day, I am someone who collects experiences more than things. New places, new people, new problems worth solving — that is what drives me both inside and outside the code.
             </span>
           </div>
         </div>
 
       </div>
+
+      {/* Bottom fade into Gallery / next section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white"
+      />
     </section>
   );
 }

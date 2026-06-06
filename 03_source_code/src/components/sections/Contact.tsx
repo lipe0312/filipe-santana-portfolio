@@ -8,7 +8,7 @@ export default function Contact() {
   const { ref, isVisible } = useIntersectionObserver();
 
   return (
-    <section id="contact" className="px-6 py-24 bg-alabaster">
+    <section id="contact" className="bg-white px-6 py-24">
       <div className="max-w-5xl mx-auto">
         <div
           ref={ref as RefObject<HTMLDivElement>}

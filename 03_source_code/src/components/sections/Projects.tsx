@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { type CSSProperties, type RefObject, useState, useRef, useCallback, useEffect } from "react";
+import { type RefObject, useState, useRef, useCallback, useEffect } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { getStaggerDelay } from "@/lib/utils";
 import { projects, type Project } from "@/data/projects";
@@ -24,51 +24,9 @@ export default function Projects() {
     null,
   );
   const [isTouch, setIsTouch] = useState(false);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setIsTouch(window.matchMedia("(hover: none)").matches);
-  }, []);
-
-  useEffect(() => {
-    if (
-      window.matchMedia("(hover: none)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) return;
-
-    let rafPending = false;
-    let rafId = 0;
-
-    const handler = (e: MouseEvent) => {
-      if (rafPending) return;
-      rafPending = true;
-      rafId = requestAnimationFrame(() => {
-        rafPending = false;
-        const glow = glowRef.current;
-        const section = sectionRef.current;
-        if (!glow || !section) return;
-        const rect = section.getBoundingClientRect();
-        if (
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right &&
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom
-        ) {
-          glow.style.opacity = "1";
-          glow.style.setProperty("--glow-x", `${e.clientX}px`);
-          glow.style.setProperty("--glow-y", `${e.clientY}px`);
-        } else {
-          glow.style.opacity = "0";
-        }
-      });
-    };
-
-    window.addEventListener("mousemove", handler);
-    return () => {
-      window.removeEventListener("mousemove", handler);
-      cancelAnimationFrame(rafId);
-    };
   }, []);
 
   const handleOpenModal = useCallback(
@@ -85,21 +43,10 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="px-6 py-24 relative bg-alabaster">
-      <div
-        ref={glowRef}
-        aria-hidden="true"
-        style={{
-          pointerEvents: "none",
-          position: "fixed",
-          inset: 0,
-          opacity: 0,
-          transition: "opacity 300ms ease-out",
-          background:
-            "radial-gradient(200px circle at var(--glow-x) var(--glow-y), rgba(0,0,0,0.035), transparent 70%)",
-          zIndex: 0,
-        } as CSSProperties}
-      />
+    <section
+      id="projects"
+      className="bg-white px-6 py-24 relative"
+    >
       <div className="max-w-[1200px] mx-auto relative" style={{ zIndex: 1 }}>
         <div className="mb-12">
           <p className="font-mono text-text-secondary text-xs uppercase tracking-widest mb-3">
@@ -122,6 +69,13 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      {/* Bottom fade into Experience section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white"
+        style={{ zIndex: 2 }}
+      />
 
       <ProjectModal
         project={activeProject}
@@ -234,9 +188,7 @@ function ProjectCard({
       >
         {/* Media layer */}
         <div
-          className={`absolute inset-0 transition-opacity duration-300 ease-out ${
-            isTouch ? "opacity-[0.3]" : "opacity-0 group-hover:opacity-100"
-          }`}
+          className={"absolute inset-0 transition-opacity duration-300 ease-out " + (isTouch ? "opacity-[0.3]" : "opacity-0 group-hover:opacity-100")}
         >
           {isVideo ? (
             <video
@@ -245,9 +197,7 @@ function ProjectCard({
               muted
               playsInline
               preload="none"
-              className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
-                isTouch ? "" : "scale-100 group-hover:scale-105"
-              }`}
+              className={"w-full h-full object-cover transition-transform duration-300 ease-out " + (isTouch ? "" : "scale-100 group-hover:scale-105")}
             />
           ) : project.heroMediaType === "side-by-side" &&
             project.heroMediaPaths ? (
@@ -283,9 +233,7 @@ function ProjectCard({
               <img
                 src={project.heroMediaPath}
                 alt=""
-                className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
-                  isTouch ? "" : "scale-100 group-hover:scale-105"
-                }`}
+                className={"w-full h-full object-cover transition-transform duration-300 ease-out " + (isTouch ? "" : "scale-100 group-hover:scale-105")}
                 onError={() => setSingleImageError(true)}
               />
             )
@@ -297,9 +245,7 @@ function ProjectCard({
 
         {/* Gradient overlay */}
         <div
-          className={`absolute inset-0 transition-opacity duration-300 ease-out ${
-            isTouch ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          }`}
+          className={"absolute inset-0 transition-opacity duration-300 ease-out " + (isTouch ? "opacity-100" : "opacity-0 group-hover:opacity-100")}
           style={{
             background:
               "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, transparent 70%)",

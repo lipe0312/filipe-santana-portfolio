@@ -11,7 +11,6 @@ export default function Hero() {
     };
 
     if (document.readyState === "complete" || document.readyState === "interactive") {
-      // Already loaded, set state immediately
       requestAnimationFrame(handleLoad);
     } else {
       window.addEventListener("DOMContentLoaded", handleLoad);
@@ -34,14 +33,39 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 pt-24 bg-pearl relative">
-      <div className="blob-bg" aria-hidden="true">
-        <div className="absolute w-96 h-96 rounded-full bg-pearl opacity-50 blur-[80px] will-change-transform animate-blob-slow top-[-10%] left-[-5%]" />
-        <div className="absolute w-80 h-80 rounded-full bg-alabaster opacity-50 blur-[80px] will-change-transform animate-blob-mid top-[20%] right-[-8%]" />
-        <div className="absolute w-72 h-72 rounded-full bg-soft-slate opacity-40 blur-[80px] will-change-transform animate-blob-fast bottom-[-5%] left-[30%]" />
+    <section className="bg-white relative min-h-screen flex items-center justify-center px-6 pt-24">
+
+      {/* Ambient blobs — absolute so they stay inside the white Hero */}
+      <div aria-hidden="true" className="blob-bg">
+        <div
+          className="blob-1 absolute rounded-full will-change-transform"
+          style={{
+            width: "700px",
+            height: "700px",
+            top: "-8%",
+            left: "-6%",
+            opacity: 0.7,
+            filter: "blur(90px)",
+            background: "#CBD5E1",
+          }}
+        />
+        <div
+          className="blob-2 absolute rounded-full will-change-transform"
+          style={{
+            width: "580px",
+            height: "580px",
+            top: "15%",
+            right: "-8%",
+            opacity: 0.55,
+            filter: "blur(80px)",
+            background: "#C7D2FE",
+          }}
+        />
       </div>
+
       <div
-        className={isLoaded ? "max-w-5xl w-full transition-opacity duration-500 ease-out opacity-100" : "max-w-5xl w-full transition-opacity duration-500 ease-out opacity-0"}
+        className={isLoaded ? "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-100" : "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-0"}
+        style={{ zIndex: 1 }}
       >
         <h1 className="text-[clamp(2.5rem,5vw,5rem)] font-bold leading-tight font-display mb-4">
           Building systems that think: from the edge device to the interface.
@@ -67,6 +91,12 @@ export default function Hero() {
           </a>
         </div>
       </div>
+
+      {/* Bottom fade — softens the Hero content edge into the Projects section */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-white"
+      />
     </section>
   );
 }
