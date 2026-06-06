@@ -87,12 +87,7 @@ export const projects: Project[] = [
     name: "Brain Sphere",
     oneLiner:
       "Hybrid quantum edge architecture for federated learning in medical imaging.",
-    techStack: [
-      "PyTorch",
-      "PennyLane QML",
-      "Flower (Federated Learning)",
-      "U-Net 3D",
-    ],
+    techStack: ["PyTorch", "PennyLane QML", "Flower", "U-Net 3D"],
     status: "Active Research",
     date: "2026",
     heroMediaPath: "/images/brainsphere-hero.png",

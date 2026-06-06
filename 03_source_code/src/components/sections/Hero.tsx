@@ -10,7 +10,10 @@ export default function Hero() {
       setIsLoaded(true);
     };
 
-    if (document.readyState === "complete" || document.readyState === "interactive") {
+    if (
+      document.readyState === "complete" ||
+      document.readyState === "interactive"
+    ) {
       requestAnimationFrame(handleLoad);
     } else {
       window.addEventListener("DOMContentLoaded", handleLoad);
@@ -34,7 +37,6 @@ export default function Hero() {
 
   return (
     <section className="bg-white relative min-h-screen flex items-center justify-center px-6 pt-24">
-
       {/* Ambient blobs — absolute so they stay inside the white Hero */}
       <div aria-hidden="true" className="blob-bg">
         <div
@@ -64,7 +66,11 @@ export default function Hero() {
       </div>
 
       <div
-        className={isLoaded ? "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-100" : "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-0"}
+        className={
+          isLoaded
+            ? "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-100"
+            : "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-0"
+        }
         style={{ zIndex: 1 }}
       >
         <h1 className="text-[clamp(2.5rem,5vw,5rem)] font-bold leading-tight font-display mb-4">
@@ -72,7 +78,10 @@ export default function Hero() {
         </h1>
         <div className="text-text-secondary text-lg md:text-xl mb-8 font-sans">
           <p className="mb-2">Filipe Santana</p>
-          <p>Computer Science Researcher & Software Engineer based in Salvador, BA.</p>
+          <p>
+            Computer Science Researcher & Software Engineer based in Salvador,
+            BA.
+          </p>
         </div>
         <div className="flex flex-wrap gap-4">
           <a
