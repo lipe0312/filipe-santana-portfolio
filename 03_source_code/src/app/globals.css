@@ -82,6 +82,49 @@ body {
   mix-blend-mode: multiply;
 }
 
+/* Project card spotlight — mouse-tracking radial gradient + border glow */
+.card-glow-wrapper {
+  position: relative;
+  border-radius: var(--radius-card);
+}
+
+.card-glow-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-card);
+  background: radial-gradient(
+    280px circle at var(--mouse-x, -200px) var(--mouse-y, -200px),
+    rgba(148, 163, 184, 0.5),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+  pointer-events: none;
+}
+
+.card-glow-wrapper:hover::after {
+  opacity: 1;
+}
+
+.card-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, -200px) var(--mouse-y, -200px),
+    rgba(255, 255, 255, 0.10),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-glow-wrapper:hover .card-spotlight {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -90,4 +133,6 @@ body {
   }
   .blob-1, .blob-2 { animation: none !important; }
   .line-reveal { color: #18181B !important; transition: none !important; }
+  .card-glow-wrapper::after,
+  .card-spotlight { transition: none !important; }
 }

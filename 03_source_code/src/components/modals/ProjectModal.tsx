@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import FocusTrap from "focus-trap-react";
@@ -13,8 +13,14 @@ export interface ProjectModalProps {
   triggerElement: HTMLElement | null;
 }
 
+const MODAL_TAG_STYLE: React.CSSProperties = {
+  borderRadius: "var(--radius-tag, 6px)",
+  transition: "transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+};
+
 function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+  const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
     setPortalTarget(document.body);
@@ -46,6 +52,60 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
       triggerElement.focus();
     }
   }, [project, triggerElement]);
+
+  // Magnetic tag repulsion — active only while modal is open
+  useEffect(function() {
+    if (!project) return;
+    if (
+      window.matchMedia("(hover: none)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
+
+    let rafPending = false;
+    let rafId = 0;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const handleMouseMove = function(e: MouseEvent) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (rafPending) return;
+      rafPending = true;
+      rafId = requestAnimationFrame(function() {
+        rafPending = false;
+        const computed = tagRefs.current.map(function(tag) {
+          if (!tag) return null;
+          const rect = tag.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = mouseX - cx;
+          const dy = mouseY - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          return { tag, dx, dy, dist };
+        });
+        computed.forEach(function(r) {
+          if (!r) return;
+          if (r.dist < 60 && r.dist > 0) {
+            const force = ((60 - r.dist) / 60) * 6;
+            const tx = -(r.dx / r.dist) * Math.min(force, 6);
+            const ty = -(r.dy / r.dist) * Math.min(force, 6);
+            r.tag.style.transform = "translate(" + tx + "px, " + ty + "px)";
+          } else {
+            r.tag.style.transform = "translate(0px, 0px)";
+          }
+        });
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return function() {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rafId);
+      tagRefs.current.forEach(function(tag) {
+        if (tag) tag.style.transform = "translate(0px, 0px)";
+      });
+    };
+  }, [project]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!portalTarget) return null;
 
@@ -149,14 +209,18 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                         {project.theSolution}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-5">
-                        {project.techStack.map((tech) => (
-                          <span
-                            key={tech}
-                            className="font-mono text-[0.75rem] bg-zinc-100 text-zinc-800 border border-zinc-200 rounded-md px-2.5 py-1"
-                          >
-                            {tech}
-                          </span>
-                        ))}
+                        {project.techStack.map(function(tech, i) {
+                          return (
+                            <span
+                              key={tech}
+                              ref={function(el) { tagRefs.current[i] = el; }}
+                              className="font-mono text-[0.75rem] bg-zinc-100 text-zinc-800 border border-zinc-200 rounded-md px-2.5 py-1"
+                              style={MODAL_TAG_STYLE}
+                            >
+                              {tech}
+                            </span>
+                          );
+                        })}
                       </div>
                     </section>
 

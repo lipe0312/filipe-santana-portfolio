@@ -40,25 +40,25 @@ export default function Hero() {
         <div
           className="blob-1 absolute rounded-full will-change-transform"
           style={{
-            width: "700px",
-            height: "700px",
+            width: "720px",
+            height: "720px",
             top: "-8%",
             left: "-6%",
-            opacity: 0.7,
-            filter: "blur(90px)",
-            background: "#CBD5E1",
+            opacity: 0.85,
+            filter: "blur(70px)",
+            background: "#94A3B8",
           }}
         />
         <div
           className="blob-2 absolute rounded-full will-change-transform"
           style={{
-            width: "580px",
-            height: "580px",
-            top: "15%",
+            width: "600px",
+            height: "600px",
+            top: "12%",
             right: "-8%",
-            opacity: 0.55,
-            filter: "blur(80px)",
-            background: "#C7D2FE",
+            opacity: 0.7,
+            filter: "blur(60px)",
+            background: "#A5B4FC",
           }}
         />
       </div>

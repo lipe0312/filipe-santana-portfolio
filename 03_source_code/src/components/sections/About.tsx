@@ -261,6 +261,12 @@ export default function About() {
         />
       </div>
 
+      {/* Top-seam cover — masks blob bleed at the Experience → About boundary */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white to-transparent"
+      />
+
       <div className="relative max-w-5xl mx-auto">
 
         {/* Section header */}
