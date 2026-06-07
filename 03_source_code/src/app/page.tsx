@@ -2,6 +2,7 @@ import Hero from "@/components/sections/Hero";
 import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import About from "@/components/sections/About";
+import Gallery from "@/components/sections/Gallery";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
@@ -17,11 +18,7 @@ export default function Home() {
       <Projects />
       <Experience />
       <About />
-      <section id="gallery" className="bg-white relative min-h-[100vh] flex items-center justify-center p-8">
-        <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white to-transparent" />
-        <h2 className="text-4xl font-bold text-text-primary">Gallery</h2>
-        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white" />
-      </section>
+      <Gallery />
       <Contact />
     </main>
   );
