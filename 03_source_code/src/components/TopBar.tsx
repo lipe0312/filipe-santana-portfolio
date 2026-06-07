@@ -54,10 +54,7 @@ export default function TopBar() {
     };
 
     const onScroll = () => {
-      if (frameHandle.current !== null) {
-        return;
-      }
-
+      if (frameHandle.current !== null) return;
       frameHandle.current = window.requestAnimationFrame(() => {
         handleScroll();
         frameHandle.current = null;
@@ -87,9 +84,7 @@ export default function TopBar() {
       .map((item) => document.getElementById(item.href.substring(1)))
       .filter((element): element is HTMLElement => element !== null);
 
-    if (sectionElements.length === 0) {
-      return undefined;
-    }
+    if (sectionElements.length === 0) return undefined;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -108,23 +103,36 @@ export default function TopBar() {
     );
 
     sectionElements.forEach((section) => observer.observe(section));
-
     return () => observer.disconnect();
   }, [navItems]);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transform transition-transform duration-300 ease-out ${
-        isHidden ? "-translate-y-full" : "translate-y-0"
-      } ${isScrolled ? "bg-background-base/75 backdrop-blur-[16px] border-b border-border" : "bg-transparent"}`}
+      className={
+        "fixed inset-x-0 top-0 z-50 transform transition-transform duration-300 ease-out " +
+        (isHidden ? "-translate-y-full" : "translate-y-0") +
+        " " +
+        (isScrolled
+          ? "bg-background-base/75 backdrop-blur-[16px] border-b border-border"
+          : "bg-transparent")
+      }
     >
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 sm:px-6 py-4 min-w-0">
+        {/* Logo — slides top→bottom on hover */}
         <a
           href="#"
           onClick={handleLogoClick}
-          className="text-sm font-semibold tracking-[0.12em] text-text-primary uppercase font-sans"
+          className="group relative inline-flex items-center overflow-hidden text-sm font-semibold tracking-[0.12em] text-text-primary uppercase font-sans shrink-0"
         >
-          Filipe Santana
+          <span aria-hidden="true" className="select-none opacity-0">
+            Filipe Santana
+          </span>
+          <span className="absolute inset-0 flex items-center transition-transform duration-300 ease-out group-hover:translate-y-full">
+            Filipe Santana
+          </span>
+          <span className="absolute inset-0 flex items-center -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+            Filipe Santana
+          </span>
         </a>
 
         <nav aria-label="Primary navigation" className="hidden desktop:block">
@@ -135,16 +143,29 @@ export default function TopBar() {
 
               return (
                 <li key={item.href}>
+                  {/* Nav link — dual-span slide top→bottom on hover */}
                   <a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`transition-colors duration-200 ease-out ${
-                      isActive
-                        ? "text-text-primary"
-                        : "text-text-secondary hover:text-text-primary"
-                    }`}
+                    className={
+                      "group relative inline-flex items-center overflow-hidden " +
+                      (isActive ? "text-text-primary" : "text-text-secondary")
+                    }
                   >
-                    {item.label}
+                    <span aria-hidden="true" className="select-none opacity-0">
+                      {item.label}
+                    </span>
+                    <span
+                      className={
+                        "absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out group-hover:translate-y-full " +
+                        (isActive ? "text-text-primary" : "text-text-secondary")
+                      }
+                    >
+                      {item.label}
+                    </span>
+                    <span className="absolute inset-0 flex items-center justify-center text-text-primary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+                      {item.label}
+                    </span>
                   </a>
                 </li>
               );

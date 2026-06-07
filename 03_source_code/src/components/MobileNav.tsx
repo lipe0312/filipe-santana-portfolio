@@ -52,7 +52,7 @@ export default function MobileNav() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[100] bg-background-base flex flex-col items-center justify-center">
+        <div className="fixed inset-0 z-[100] bg-background-base flex flex-col items-center justify-center overflow-hidden">
           <button
             onClick={() => setIsOpen(false)}
             className="absolute top-6 right-6 text-text-secondary hover:text-text-primary transition-colors"
@@ -77,12 +77,21 @@ export default function MobileNav() {
             <ul className="flex flex-col items-center gap-8">
               {navLinks.map((item) => (
                 <li key={item.href}>
+                  {/* Full-overlay nav item — dual-span slide top→bottom on hover */}
                   <a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className="text-3xl font-semibold text-text-primary hover:text-text-secondary transition-colors"
+                    className="group relative inline-flex items-center overflow-hidden text-3xl font-semibold"
                   >
-                    {item.label}
+                    <span aria-hidden="true" className="select-none opacity-0">
+                      {item.label}
+                    </span>
+                    <span className="absolute inset-0 flex items-center justify-center text-text-primary transition-transform duration-300 ease-out group-hover:translate-y-full">
+                      {item.label}
+                    </span>
+                    <span className="absolute inset-0 flex items-center justify-center text-text-secondary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+                      {item.label}
+                    </span>
                   </a>
                 </li>
               ))}
