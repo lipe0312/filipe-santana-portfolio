@@ -84,19 +84,37 @@ export default function Hero() {
           </p>
         </div>
         <div className="flex flex-wrap gap-4">
+          {/* View Projects — dark bg, text slides TOP → BOTTOM on hover */}
           <a
             href="#projects"
             onClick={(e) => handleNavClick(e, "#projects")}
-            className="px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-200 bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-700 hover:border-zinc-700 font-sans"
+            className="group relative inline-flex items-center justify-center overflow-hidden px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-300 bg-zinc-900 border-zinc-900 hover:bg-transparent hover:border-zinc-900 font-sans"
           >
-            View Projects
+            <span aria-hidden="true" className="select-none opacity-0">
+              View Projects
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-white transition-transform duration-300 ease-out group-hover:translate-y-full">
+              View Projects
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-zinc-900 -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+              View Projects
+            </span>
           </a>
+          {/* How can I help — light border, text slides BOTTOM → TOP on hover */}
           <a
             href="#diferencial"
             onClick={(e) => handleNavClick(e, "#diferencial")}
-            className="px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-200 bg-transparent text-zinc-900 border-zinc-900 hover:bg-zinc-900 hover:text-white font-sans"
+            className="group relative inline-flex items-center justify-center overflow-hidden px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-300 bg-transparent border-zinc-900 hover:bg-zinc-900 font-sans"
           >
-            How can I help
+            <span aria-hidden="true" className="select-none opacity-0">
+              How can I help
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-zinc-900 transition-transform duration-300 ease-out group-hover:-translate-y-full">
+              How can I help
+            </span>
+            <span className="absolute inset-0 flex items-center justify-center text-white translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+              How can I help
+            </span>
           </a>
         </div>
       </div>

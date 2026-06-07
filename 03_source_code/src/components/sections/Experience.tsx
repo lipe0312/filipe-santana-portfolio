@@ -1,6 +1,6 @@
 "use client";
 
-import { type RefObject } from "react";
+import { useState, type RefObject } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { getStaggerDelay } from "@/lib/utils";
 
@@ -64,9 +64,11 @@ export default function Experience() {
           Experience
         </h2>
         <div className="space-y-12">
-          {experiences.map((exp, index) => (
-            <ExperienceItem key={index} experience={exp} index={index} />
-          ))}
+          {experiences.map((exp, index) => {
+            return (
+              <ExperienceItem key={index} experience={exp} index={index} />
+            );
+          })}
         </div>
       </div>
 
@@ -87,12 +89,16 @@ function ExperienceItem({
   index: number;
 }) {
   const { ref, isVisible } = useIntersectionObserver();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div
       ref={ref as RefObject<HTMLDivElement>}
       className={isVisible ? "reveal is-visible" : "reveal"}
       style={{ transitionDelay: `${getStaggerDelay(index)}ms` }}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+      onClick={() => setIsExpanded((prev) => !prev)}
     >
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-3">
         <div>
@@ -103,23 +109,52 @@ function ExperienceItem({
             {experience.company} · {experience.location}
           </p>
         </div>
-        <p className="text-text-secondary font-mono text-sm shrink-0">
-          {experience.timeline}
-        </p>
+        <div className="flex items-center gap-2 shrink-0">
+          <p className="text-text-secondary font-mono text-sm">
+            {experience.timeline}
+          </p>
+          {/* Mobile-only expand indicator — hidden on md+ where hover takes over */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className={"md:hidden text-zinc-400 transition-transform duration-300 " + (isExpanded ? "rotate-180" : "rotate-0")}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
       </div>
+
       <p className="text-text-secondary font-sans mb-4 leading-relaxed">
         {experience.summary}
       </p>
-      <ul className="space-y-2">
-        {experience.achievements.map((achievement, i) => (
-          <li
-            key={i}
-            className="text-text-secondary font-sans leading-relaxed list-disc list-inside"
-          >
-            {achievement}
-          </li>
-        ))}
-      </ul>
+
+      {/* CSS grid trick: grid-rows 0fr → 1fr animates height without fixed px */}
+      <div
+        className={"grid transition-all duration-300 ease-out " + (isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0")}
+      >
+        <div className="overflow-hidden">
+          <ul className="space-y-2 pb-1">
+            {experience.achievements.map((achievement, i) => {
+              return (
+                <li
+                  key={i}
+                  className="text-text-secondary font-sans leading-relaxed list-disc list-inside"
+                >
+                  {achievement}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

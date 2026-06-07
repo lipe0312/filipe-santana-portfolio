@@ -396,16 +396,34 @@ export default function About() {
           </h3>
           <div className="space-y-6">
             <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "600ms" }}>
-              Here is what I actually bring to a team. I learn fast. When a project demands a framework I have never touched or a domain I have never worked in, I do not stall and I do not make excuses. I absorb it, apply it, and start delivering. That adaptability is what lets me move across layers most engineers never cross, from embedded firmware to applied AI to the web interface that ties it all together.
+              Here is what I actually bring to a team.{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">I learn fast.</span>{" "}
+              When a project demands a framework I have never touched or a domain I have never worked in,{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">I do not stall and I do not make excuses.</span>{" "}
+              I absorb it, apply it, and start delivering. That adaptability is what lets me move across layers most engineers never cross, from{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">embedded firmware to applied AI to the web interface</span>{" "}
+              that ties it all together.
             </span>
             <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "680ms" }}>
-              But raw technical range means nothing if you cannot communicate it. I can stand in front of a room and translate a dense technical architecture into language a business leader, an investor, or a teammate actually understands. I have spent time teaching, presenting, and explaining complex systems to people who do not live in code, and I know how to bridge the gap between what is technically true and what a decision maker needs to hear.
+              But{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">raw technical range</span>{" "}
+              means nothing if you cannot communicate it. I can stand in front of a room and translate a dense technical architecture into language a business leader, an investor, or a teammate actually understands. I have spent time teaching, presenting, and explaining complex systems to people who do not live in code, and I know how to{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">bridge the gap between what is technically true and what a decision maker needs to hear.</span>
             </span>
             <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "760ms" }}>
-              What truly defines how I work is simpler than any skill on a list. I do not quit. Hand me a problem that looks impossible and I will keep pushing until it is solved, no matter what it takes. I carry a relentless drive to grow and improve, but I carry it with humility and integrity. I am confident in what I can build, honest about what I am still learning, and reliable when it matters most.
+              What truly defines how I work is simpler than any skill on a list.{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">I do not quit.</span>{" "}
+              Hand me a problem that looks impossible and I will keep pushing until it is solved, no matter what it takes. I carry a{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">relentless drive to grow and improve</span>
+              , but I carry it with humility and integrity. I am confident in what I can build, honest about what I am still learning, and{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">reliable when it matters most.</span>
             </span>
             <span className="line-reveal inline-block font-sans text-lg leading-relaxed" style={{ transitionDelay: "840ms" }}>
-              If you need someone who will own a hard problem from the first circuit to the final deployment and refuse to walk away until it works, that is exactly who I am.
+              If you need someone who will{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">own a hard problem from the first circuit to the final deployment</span>{" "}
+              and{" "}
+              <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">refuse to walk away until it works</span>
+              , that is exactly who I am.
             </span>
           </div>
         </div>
