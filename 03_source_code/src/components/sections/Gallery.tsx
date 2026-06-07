@@ -10,26 +10,41 @@ import {
 import Image from "next/image";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
-const GALLERY_IMAGES = [
-  { src: "/images/_gallery/1.png",  alt: "Photo 1"  },
-  { src: "/images/_gallery/2.png",  alt: "Photo 2"  },
-  { src: "/images/_gallery/3.png",  alt: "Photo 3"  },
-  { src: "/images/_gallery/4.png",  alt: "Photo 4"  },
-  { src: "/images/_gallery/6.png",  alt: "Photo 6"  },
-  { src: "/images/_gallery/7.png",  alt: "Photo 7"  },
-  { src: "/images/_gallery/8.png",  alt: "Photo 8"  },
-  { src: "/images/_gallery/9.png",  alt: "Photo 9"  },
-  { src: "/images/_gallery/10.png", alt: "Photo 10" },
-  { src: "/images/_gallery/11.png", alt: "Photo 11" },
+// ── Types ─────────────────────────────────────────────────────────────────────
+type ImageItem = { kind: "image"; src: string; alt: string };
+type VideoItem = { kind: "video"; webm: string; mov: string; alt: string };
+type GalleryItem = ImageItem | VideoItem;
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+// Videos are interspersed so they appear roughly every ~8 items in the loop.
+const GALLERY_ITEMS: GalleryItem[] = [
+  { kind: "image", src: "/images/_gallery/1.png",  alt: "Photo 1"  },
+  { kind: "image", src: "/images/_gallery/2.png",  alt: "Photo 2"  },
+  { kind: "image", src: "/images/_gallery/3.png",  alt: "Photo 3"  },
+  { kind: "video", webm: "/videos/_gallery/v1.webm", mov: "/videos/_gallery/v1.MOV", alt: "Video 1" },
+  { kind: "image", src: "/images/_gallery/4.png",  alt: "Photo 4"  },
+  { kind: "image", src: "/images/_gallery/6.png",  alt: "Photo 6"  },
+  { kind: "image", src: "/images/_gallery/7.png",  alt: "Photo 7"  },
+  { kind: "image", src: "/images/_gallery/8.png",  alt: "Photo 8"  },
+  { kind: "image", src: "/images/_gallery/9.png",  alt: "Photo 9"  },
+  { kind: "video", webm: "/videos/_gallery/v2.webm", mov: "/videos/_gallery/v2.MOV", alt: "Video 2" },
+  { kind: "image", src: "/images/_gallery/10.png", alt: "Photo 10" },
+  { kind: "image", src: "/images/_gallery/11.png", alt: "Photo 11" },
+  { kind: "image", src: "/images/_gallery/12.png", alt: "Photo 12" },
+  { kind: "image", src: "/images/_gallery/13.png", alt: "Photo 13" },
+  { kind: "image", src: "/images/_gallery/14.png", alt: "Photo 14" },
+  { kind: "image", src: "/images/_gallery/15.png", alt: "Photo 15" },
+  { kind: "image", src: "/images/_gallery/16.png", alt: "Photo 16" },
+  { kind: "image", src: "/images/_gallery/17.png", alt: "Photo 17" },
 ];
 
-// Doubled for seamless marquee loop — translateX(-50%) = exactly one set
-const MARQUEE_IMAGES = [...GALLERY_IMAGES, ...GALLERY_IMAGES];
+// Doubled so scrollLeft can reset at the halfway point for a seamless loop
+const MARQUEE_ITEMS: GalleryItem[] = [...GALLERY_ITEMS, ...GALLERY_ITEMS];
 
-// Fixed height; width stays auto so each image keeps its natural aspect ratio
-const DESKTOP_H = 288;
+// px per animation frame at ~60fps.
+// 0.5px/frame × 60fps × 240s = 7200px per full cycle — sized for this gallery.
+const SCROLL_SPEED = 0.5;
 
-// Mobile: fixed box, object-cover gracefully crops
 const MOBILE_W = 240;
 const MOBILE_H = 300;
 
@@ -40,27 +55,82 @@ const FADE_MASK: CSSProperties = {
     "linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)",
 };
 
-const IMG_TRANSITION =
-  "filter 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-
-const WRAP_TRANSITION =
-  "transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-
-const MOBILE_IMG_TRANSITION =
-  "filter 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function Gallery() {
   const { ref: sectionRef, isVisible } = useIntersectionObserver();
-
-  // ── Desktop marquee state ────────────────────────────────────────────────
-  const [isPaused, setIsPaused] = useState(false);
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
-  // ── Mobile center-snap state ─────────────────────────────────────────────
+  // Refs for RAF / setTimeout closures — avoid stale-closure over React state
+  const isPausedRef = useRef(false);
+  const isHoveredRef = useRef(false);
+  const desktopRef = useRef<HTMLDivElement>(null);
+
+  // Mobile snap-scroll
   const mobileContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // ── Desktop: auto-scroll + manual scroll harmony ──────────────────────────
+  useEffect(function () {
+    const container = desktopRef.current;
+    if (!container) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let rafId: number;
+    let resumeTimer: ReturnType<typeof setTimeout> | null = null;
+
+    // Keep scrollLeft inside [0, half) — fires on both auto and manual scroll
+    const normalize = function () {
+      const half = container.scrollWidth / 2;
+      if (half <= 0) return;
+      if (container.scrollLeft >= half) container.scrollLeft -= half;
+    };
+
+    const tick = function () {
+      if (!isPausedRef.current) container.scrollLeft += SCROLL_SPEED;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    // 3s after the last interaction, resume auto-scroll (unless mouse is still over)
+    const scheduleResume = function () {
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(function () {
+        if (!isHoveredRef.current) isPausedRef.current = false;
+      }, 3000);
+    };
+
+    const onWheel = function () {
+      isPausedRef.current = true;
+      scheduleResume();
+    };
+
+    const onTouchStart = function () {
+      isPausedRef.current = true;
+      if (resumeTimer) clearTimeout(resumeTimer);
+    };
+
+    const onTouchEnd = function () {
+      scheduleResume();
+    };
+
+    container.addEventListener("scroll", normalize, { passive: true });
+    container.addEventListener("wheel", onWheel, { passive: true });
+    container.addEventListener("touchstart", onTouchStart, { passive: true });
+    container.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    rafId = requestAnimationFrame(tick);
+
+    return function () {
+      cancelAnimationFrame(rafId);
+      if (resumeTimer) clearTimeout(resumeTimer);
+      container.removeEventListener("scroll", normalize);
+      container.removeEventListener("wheel", onWheel);
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Mobile: center-image detection ───────────────────────────────────────
   useEffect(function () {
     const container = mobileContainerRef.current;
     if (!container) return;
@@ -94,13 +164,13 @@ export default function Gallery() {
       ref={sectionRef as RefObject<HTMLElement>}
       className="bg-white relative overflow-hidden px-6 py-24"
     >
-      {/* Top seam cover */}
+      {/* Top seam */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white to-transparent"
       />
 
-      {/* Section header — max-w-5xl mx-auto matches Experience/About exactly */}
+      {/* Section header */}
       <div
         className={(isVisible ? "reveal is-visible" : "reveal") + " max-w-5xl mx-auto mb-12"}
         style={{ transitionDelay: "0ms" }}
@@ -110,74 +180,69 @@ export default function Gallery() {
         </h2>
       </div>
 
-      {/* ── Desktop: infinite auto-scroll marquee ───────────────────────────── */}
-      {/* -mx-6 breaks out of the section's px-6 to reach full viewport width  */}
-      <div
-        className="hidden md:block overflow-hidden -mx-6"
-        style={FADE_MASK}
-        onMouseEnter={function () {
-          setIsPaused(true);
-        }}
-        onMouseLeave={function () {
-          setIsPaused(false);
-          setHoveredKey(null);
-        }}
-      >
+      {/* ── Desktop: scrollable strip ──────────────────────────────────────────
+          Outer div:  FADE_MASK + full-width bleed (-mx-6)
+          Inner div:  the actual scroll container (overflow-x-auto, no scrollbar)
+          Auto-scroll runs via RAF; trackpad wheel pauses it for 3s then resumes.
+      ──────────────────────────────────────────────────────────────────────── */}
+      <div className="hidden md:block -mx-6" style={FADE_MASK}>
         <div
-          className="gallery-track flex items-end"
-          style={{
-            gap: "16px",
-            width: "max-content",
-            paddingLeft: "24px",
-            paddingRight: "24px",
-            animationPlayState: isPaused ? "paused" : "running",
+          ref={desktopRef}
+          className="gallery-desktop overflow-x-auto flex flex-row items-center gap-8"
+          style={{ paddingLeft: "24px", paddingRight: "24px" }}
+          onMouseEnter={function () {
+            isPausedRef.current = true;
+            isHoveredRef.current = true;
+          }}
+          onMouseLeave={function () {
+            isPausedRef.current = false;
+            isHoveredRef.current = false;
+            setHoveredKey(null);
           }}
         >
-          {MARQUEE_IMAGES.map(function (img, i) {
+          {MARQUEE_ITEMS.map(function (item, i) {
             const key = String(i);
             const isHovered = hoveredKey === key;
+            const mediaClass =
+              "max-h-[400px] w-auto h-auto transition-all duration-700 " +
+              (isHovered ? "grayscale-0 scale-[1.02]" : "grayscale scale-100");
+
             return (
               <div
                 key={key}
-                onMouseEnter={function () {
-                  setHoveredKey(key);
-                }}
-                onMouseLeave={function () {
-                  setHoveredKey(null);
-                }}
-                className="flex-shrink-0 overflow-hidden rounded-xl cursor-pointer bg-zinc-100"
-                style={{
-                  height: DESKTOP_H + "px",
-                  transform: isHovered ? "scale(1.02)" : "scale(1)",
-                  transition: WRAP_TRANSITION,
-                }}
+                onMouseEnter={function () { setHoveredKey(key); }}
+                onMouseLeave={function () { setHoveredKey(null); }}
+                className="flex-shrink-0 relative overflow-hidden rounded-xl cursor-pointer"
               >
-                {/*
-                  width={600} height={DESKTOP_H}: hints for next/image optimization.
-                  CSS height + w-auto renders at the image's natural aspect ratio —
-                  no forced cropping; portrait and landscape both display correctly.
-                */}
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  width={600}
-                  height={DESKTOP_H}
-                  style={{
-                    height: DESKTOP_H + "px",
-                    width: "auto",
-                    display: "block",
-                    filter: isHovered ? "grayscale(0%)" : "grayscale(100%)",
-                    opacity: isHovered ? 1 : 0.72,
-                    transition: IMG_TRANSITION,
-                  }}
-                />
+                {item.kind === "image" ? (
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={800}
+                    height={800}
+                    unoptimized
+                    className={mediaClass}
+                  />
+                ) : (
+                  <video
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                    aria-label={item.alt}
+                    className={mediaClass}
+                  >
+                    <source src={item.webm} type="video/webm" />
+                    <source src={item.mov} type="video/quicktime" />
+                  </video>
+                )}
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* ── Mobile: horizontal snap scroll, center image turns color ─────────── */}
+      {/* ── Mobile: horizontal snap scroll ────────────────────────────────────── */}
       <div
         ref={mobileContainerRef}
         className="gallery-mobile md:hidden flex overflow-x-auto -mx-6"
@@ -188,14 +253,16 @@ export default function Gallery() {
           paddingRight: "calc(50% - " + MOBILE_W / 2 + "px)",
         } as CSSProperties}
       >
-        {GALLERY_IMAGES.map(function (img, i) {
+        {GALLERY_ITEMS.map(function (item, i) {
           const isActive = activeIndex === i;
+          const mobileClass =
+            "absolute inset-0 w-full h-full object-cover transition-all duration-500 " +
+            (isActive ? "grayscale-0 opacity-100" : "grayscale opacity-60");
+
           return (
             <div
               key={String(i)}
-              ref={function (el) {
-                itemRefs.current[i] = el;
-              }}
+              ref={function (el) { itemRefs.current[i] = el; }}
               data-index={String(i)}
               className="flex-shrink-0 relative overflow-hidden rounded-xl bg-zinc-100"
               style={{
@@ -204,24 +271,34 @@ export default function Gallery() {
                 scrollSnapAlign: "center",
               } as CSSProperties}
             >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                sizes="240px"
-                className="object-cover"
-                style={{
-                  filter: isActive ? "grayscale(0%)" : "grayscale(100%)",
-                  opacity: isActive ? 1 : 0.6,
-                  transition: MOBILE_IMG_TRANSITION,
-                }}
-              />
+              {item.kind === "image" ? (
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  unoptimized
+                  sizes="240px"
+                  className={mobileClass}
+                />
+              ) : (
+                <video
+                  muted
+                  autoPlay
+                  loop
+                  playsInline
+                  aria-label={item.alt}
+                  className={mobileClass}
+                >
+                  <source src={item.webm} type="video/webm" />
+                  <source src={item.mov} type="video/quicktime" />
+                </video>
+              )}
             </div>
           );
         })}
       </div>
 
-      {/* Bottom fade into Contact */}
+      {/* Bottom fade */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white"

@@ -153,12 +153,14 @@ body {
   animation: gallery-marquee 240s linear infinite;
 }
 
-/* Hide scrollbar on gallery mobile strip */
-.gallery-mobile {
+/* Hide scrollbar — shared between mobile snap strip and desktop scroll strip */
+.gallery-mobile,
+.gallery-desktop {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.gallery-mobile::-webkit-scrollbar {
+.gallery-mobile::-webkit-scrollbar,
+.gallery-desktop::-webkit-scrollbar {
   display: none;
 }
 
