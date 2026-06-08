@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type RefObject } from "react";
+import { useState, useEffect, type RefObject } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { getStaggerDelay } from "@/lib/utils";
 import { useTranslations } from "@/context/LanguageContext";
@@ -86,7 +86,12 @@ function ExperienceItem({
 }) {
   const { ref, isVisible } = useIntersectionObserver();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const t = useTranslations();
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
+  }, []);
 
   return (
     <div
@@ -94,6 +99,8 @@ function ExperienceItem({
       className={isVisible ? "reveal is-visible" : "reveal"}
       style={{ transitionDelay: `${getStaggerDelay(index)}ms` }}
       onClick={() => setIsExpanded(!isExpanded)}
+      onMouseEnter={() => { if (!isTouchDevice) setIsExpanded(true); }}
+      onMouseLeave={() => { if (!isTouchDevice) setIsExpanded(false); }}
     >
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-3">
         <div>
