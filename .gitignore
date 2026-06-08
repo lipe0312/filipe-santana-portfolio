@@ -1,23 +1,23 @@
 # Top-level ignores for portfolio workspace
 
 # Strategy and design assets — kept out of git (large binary/design files)
-/01_strategy/
-/02_design_assets/
+01_strategy/
+02_design_assets/
 
 # AI agent artifacts and notes
-/.ai/
+.ai/
 
 # Node / Next
 node_modules/
-/.pnp
+.pnp
 .pnp.js
 
 # Next.js build output
-/.next/
-/out/
+.next/
+out/
 
 # Production build
-/build
+build/
 
 # OS and misc
 .DS_Store
@@ -38,5 +38,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#+ local editor
+# Local editor
 .vscode/
