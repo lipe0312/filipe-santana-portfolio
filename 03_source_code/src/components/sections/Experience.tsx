@@ -93,9 +93,7 @@ function ExperienceItem({
       ref={ref as RefObject<HTMLDivElement>}
       className={isVisible ? "reveal is-visible" : "reveal"}
       style={{ transitionDelay: `${getStaggerDelay(index)}ms` }}
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-      onClick={() => setIsExpanded((prev) => !prev)}
+      onClick={() => setIsExpanded(!isExpanded)}
     >
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-3">
         <div>
