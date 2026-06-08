@@ -137,9 +137,7 @@ export default function LanguageSwitcher({ compact = false }: Props) {
       {/* Dropdown panel — pt-2 bridges the hover gap so cursor stays within the group */}
       <div
         className={
-          "absolute z-50 top-full pt-2 transition-all duration-200 ease-out " +
-          (compact ? "right-0" : "left-0") +
-          " " +
+          "absolute top-full right-0 max-md:fixed max-md:top-14 max-md:right-4 z-50 pt-2 transition-all duration-200 ease-out " +
           (isOpen
             ? "visible opacity-100 translate-y-0 pointer-events-auto"
             : "invisible opacity-0 -translate-y-2 pointer-events-none")
