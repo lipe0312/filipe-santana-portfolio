@@ -18,16 +18,26 @@ type GalleryItem = ImageItem | VideoItem;
 // ── Data ──────────────────────────────────────────────────────────────────────
 // Videos are interspersed so they appear roughly every ~8 items in the loop.
 const GALLERY_ITEMS: GalleryItem[] = [
-  { kind: "image", src: "/images/_gallery/1.png",  alt: "Photo 1"  },
-  { kind: "image", src: "/images/_gallery/2.png",  alt: "Photo 2"  },
-  { kind: "image", src: "/images/_gallery/3.png",  alt: "Photo 3"  },
-  { kind: "video", webm: "/videos/_gallery/v1.webm", mov: "/videos/_gallery/v1.MOV", alt: "Video 1" },
-  { kind: "image", src: "/images/_gallery/4.png",  alt: "Photo 4"  },
-  { kind: "image", src: "/images/_gallery/6.png",  alt: "Photo 6"  },
-  { kind: "image", src: "/images/_gallery/7.png",  alt: "Photo 7"  },
-  { kind: "image", src: "/images/_gallery/8.png",  alt: "Photo 8"  },
-  { kind: "image", src: "/images/_gallery/9.png",  alt: "Photo 9"  },
-  { kind: "video", webm: "/videos/_gallery/v2.webm", mov: "/videos/_gallery/v2.MOV", alt: "Video 2" },
+  { kind: "image", src: "/images/_gallery/1.png", alt: "Photo 1" },
+  { kind: "image", src: "/images/_gallery/2.png", alt: "Photo 2" },
+  { kind: "image", src: "/images/_gallery/3.png", alt: "Photo 3" },
+  {
+    kind: "video",
+    webm: "/videos/_gallery/v1.webm",
+    mov: "/videos/_gallery/v1.MOV",
+    alt: "Video 1",
+  },
+  { kind: "image", src: "/images/_gallery/4.png", alt: "Photo 4" },
+  { kind: "image", src: "/images/_gallery/6.png", alt: "Photo 6" },
+  { kind: "image", src: "/images/_gallery/7.png", alt: "Photo 7" },
+  { kind: "image", src: "/images/_gallery/8.png", alt: "Photo 8" },
+  { kind: "image", src: "/images/_gallery/9.png", alt: "Photo 9" },
+  {
+    kind: "video",
+    webm: "/videos/_gallery/v2.webm",
+    mov: "/videos/_gallery/v2.MOV",
+    alt: "Video 2",
+  },
   { kind: "image", src: "/images/_gallery/10.png", alt: "Photo 10" },
   { kind: "image", src: "/images/_gallery/11.png", alt: "Photo 11" },
   { kind: "image", src: "/images/_gallery/12.png", alt: "Photo 12" },
@@ -36,6 +46,11 @@ const GALLERY_ITEMS: GalleryItem[] = [
   { kind: "image", src: "/images/_gallery/15.png", alt: "Photo 15" },
   { kind: "image", src: "/images/_gallery/16.png", alt: "Photo 16" },
   { kind: "image", src: "/images/_gallery/17.png", alt: "Photo 17" },
+  { kind: "image", src: "/images/_gallery/18.png", alt: "Photo 18" },
+  { kind: "image", src: "/images/_gallery/19.png", alt: "Photo 19" },
+  { kind: "image", src: "/images/_gallery/20.png", alt: "Photo 20" },
+  { kind: "image", src: "/images/_gallery/21.png", alt: "Photo 21" },
+  { kind: "image", src: "/images/_gallery/22.png", alt: "Photo 22" },
 ];
 
 // Doubled so scrollLeft can reset at the halfway point for a seamless loop
@@ -172,7 +187,10 @@ export default function Gallery() {
 
       {/* Section header */}
       <div
-        className={(isVisible ? "reveal is-visible" : "reveal") + " max-w-5xl mx-auto mb-12"}
+        className={
+          (isVisible ? "reveal is-visible" : "reveal") +
+          " max-w-5xl mx-auto mb-12"
+        }
         style={{ transitionDelay: "0ms" }}
       >
         <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display text-text-primary">
@@ -210,8 +228,12 @@ export default function Gallery() {
             return (
               <div
                 key={key}
-                onMouseEnter={function () { setHoveredKey(key); }}
-                onMouseLeave={function () { setHoveredKey(null); }}
+                onMouseEnter={function () {
+                  setHoveredKey(key);
+                }}
+                onMouseLeave={function () {
+                  setHoveredKey(null);
+                }}
                 className="flex-shrink-0 relative overflow-hidden rounded-xl cursor-pointer"
               >
                 {item.kind === "image" ? (
@@ -246,12 +268,14 @@ export default function Gallery() {
       <div
         ref={mobileContainerRef}
         className="gallery-mobile md:hidden flex overflow-x-auto -mx-6"
-        style={{
-          gap: "12px",
-          scrollSnapType: "x mandatory",
-          paddingLeft: "calc(50% - " + MOBILE_W / 2 + "px)",
-          paddingRight: "calc(50% - " + MOBILE_W / 2 + "px)",
-        } as CSSProperties}
+        style={
+          {
+            gap: "12px",
+            scrollSnapType: "x mandatory",
+            paddingLeft: "calc(50% - " + MOBILE_W / 2 + "px)",
+            paddingRight: "calc(50% - " + MOBILE_W / 2 + "px)",
+          } as CSSProperties
+        }
       >
         {GALLERY_ITEMS.map(function (item, i) {
           const isActive = activeIndex === i;
@@ -262,14 +286,18 @@ export default function Gallery() {
           return (
             <div
               key={String(i)}
-              ref={function (el) { itemRefs.current[i] = el; }}
+              ref={function (el) {
+                itemRefs.current[i] = el;
+              }}
               data-index={String(i)}
               className="flex-shrink-0 relative overflow-hidden rounded-xl bg-zinc-100"
-              style={{
-                width: MOBILE_W + "px",
-                height: MOBILE_H + "px",
-                scrollSnapAlign: "center",
-              } as CSSProperties}
+              style={
+                {
+                  width: MOBILE_W + "px",
+                  height: MOBILE_H + "px",
+                  scrollSnapAlign: "center",
+                } as CSSProperties
+              }
             >
               {item.kind === "image" ? (
                 <Image
