@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import MobileNav from "./MobileNav";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslations } from "@/context/LanguageContext";
 import type { TranslationKey } from "@/i18n/translations";
@@ -21,8 +20,12 @@ export default function TopBar() {
   const [activeSection, setActiveSection] = useState(
     navLinks[0].href.substring(1),
   );
+  const [menuOpen, setMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const frameHandle = useRef<number | null>(null);
+
+  const closeMenu = () => setMenuOpen(false);
+  const openMenu = () => setMenuOpen(true);
 
   const navItems = useMemo(() => navLinks, []);
 
@@ -113,7 +116,7 @@ export default function TopBar() {
   return (
     <header
       className={
-        "fixed inset-x-0 top-0 z-50 transform transition-transform duration-300 ease-out " +
+        "fixed inset-x-0 top-0 z-50 h-14 transform transition-transform duration-300 ease-out " +
         (isHidden ? "-translate-y-full" : "translate-y-0") +
         " " +
         (isScrolled
@@ -122,11 +125,14 @@ export default function TopBar() {
       }
     >
       <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 sm:px-6 py-4 min-w-0">
-        {/* Logo — slides top→bottom on hover */}
+        {/* Logo — hides when mobile menu is open */}
         <a
           href="#"
           onClick={handleLogoClick}
-          className="group relative inline-flex items-center overflow-hidden text-sm font-semibold tracking-[0.12em] text-text-primary uppercase font-sans shrink-0"
+          className={
+            "group relative items-center overflow-hidden text-sm font-semibold tracking-[0.12em] text-text-primary uppercase font-sans shrink-0 transition-opacity duration-150 " +
+            (menuOpen ? "hidden" : "inline-flex")
+          }
         >
           <span aria-hidden="true" className="select-none opacity-0">
             Filipe Santana
@@ -140,7 +146,9 @@ export default function TopBar() {
         </a>
 
         {/* Right side: nav + lang switcher + mobile controls */}
-        <div className="flex items-center gap-4 min-w-0">
+        <div className={"flex items-center gap-4 min-w-0 " + (menuOpen ? "flex-1" : "")}>
+
+          {/* Desktop nav — unchanged */}
           <nav aria-label="Primary navigation" className="hidden desktop:block">
             <ul className="flex items-center gap-6 text-sm font-medium font-sans">
               {navItems.map((item) => {
@@ -188,12 +196,81 @@ export default function TopBar() {
             <LanguageSwitcher />
           </div>
 
-          {/* Dropdown switcher — mobile (flag only, dropdown right-aligned) */}
-          <div className="flex desktop:hidden">
+          {/* Mobile inline nav links — visible only when menu is open */}
+          <div
+            className={"flex desktop:hidden flex-1 overflow-x-auto items-center justify-between px-2 transition-all duration-300 ease-out " + (menuOpen ? "opacity-100 translate-x-0 pointer-events-auto" : "opacity-0 translate-x-8 pointer-events-none")}
+            style={{ scrollbarWidth: "none" }}
+          >
+            {navItems.map((item) => {
+              const label = t(item.key);
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const section = document.getElementById(item.href.substring(1));
+                    if (section) {
+                      window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+                    }
+                    closeMenu();
+                  }}
+                  className="text-[10px] uppercase tracking-wide whitespace-nowrap shrink-0 text-text-secondary px-1"
+                >
+                  {label}
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Quick Contact Icon — mobile only, hidden when menu is open */}
+          <button
+            className={"desktop:hidden items-center justify-center p-2 " + (menuOpen ? "hidden" : "flex")}
+            onClick={() => {
+              const el = document.getElementById("contact");
+              if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+            }}
+            aria-label="Go to contact"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.5 13.333A1.667 1.667 0 0 1 15.833 15H5.833L2.5 18.333V4.167A1.667 1.667 0 0 1 4.167 2.5h11.666A1.667 1.667 0 0 1 17.5 4.167v9.166Z"/>
+            </svg>
+          </button>
+
+          {/* Mobile lang switcher — hidden when menu is open */}
+          <div className={"desktop:hidden " + (menuOpen ? "hidden" : "flex")}>
             <LanguageSwitcher compact />
           </div>
 
-          <MobileNav />
+          {/* Hamburger — mobile only, hidden when menu is open */}
+          <button
+            onClick={openMenu}
+            className={"desktop:hidden items-center justify-center text-text-secondary hover:text-text-primary transition-colors " + (menuOpen ? "hidden" : "flex")}
+            aria-label="Open menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
+          {/* × close button — mobile only, visible when menu is open */}
+          <button
+            onClick={closeMenu}
+            className={"desktop:hidden items-center justify-center text-text-secondary hover:text-text-primary transition-colors shrink-0 " + (menuOpen ? "flex" : "hidden")}
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
         </div>
       </div>
     </header>
