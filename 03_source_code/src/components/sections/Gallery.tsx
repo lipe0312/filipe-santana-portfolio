@@ -9,6 +9,7 @@ import {
 } from "react";
 import Image from "next/image";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useTranslations } from "@/context/LanguageContext";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type ImageItem = { kind: "image"; src: string; alt: string };
@@ -72,6 +73,7 @@ const FADE_MASK: CSSProperties = {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Gallery() {
+  const t = useTranslations();
   const { ref: sectionRef, isVisible } = useIntersectionObserver();
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
@@ -194,7 +196,7 @@ export default function Gallery() {
         style={{ transitionDelay: "0ms" }}
       >
         <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display text-text-primary">
-          Gallery
+          {t("nav.gallery")}
         </h2>
       </div>
 

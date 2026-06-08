@@ -1,16 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { MobileLangPicker } from "./LanguageSwitcher";
+import { useTranslations } from "@/context/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 
-const navLinks = [
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "About", href: "#about" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
+const navLinks: Array<{ key: TranslationKey; href: string }> = [
+  { key: "nav.projects", href: "#projects" },
+  { key: "nav.experience", href: "#experience" },
+  { key: "nav.about", href: "#about" },
+  { key: "nav.gallery", href: "#gallery" },
+  { key: "nav.contact", href: "#contact" },
 ];
 
 export default function MobileNav() {
+  const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleNavClick = (
@@ -75,28 +79,37 @@ export default function MobileNav() {
 
           <nav aria-label="Mobile navigation">
             <ul className="flex flex-col items-center gap-8">
-              {navLinks.map((item) => (
-                <li key={item.href}>
-                  {/* Full-overlay nav item — dual-span slide top→bottom on hover */}
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className="group relative inline-flex items-center overflow-hidden text-3xl font-semibold"
-                  >
-                    <span aria-hidden="true" className="select-none opacity-0">
-                      {item.label}
-                    </span>
-                    <span className="absolute inset-0 flex items-center justify-center text-text-primary transition-transform duration-300 ease-out group-hover:translate-y-full">
-                      {item.label}
-                    </span>
-                    <span className="absolute inset-0 flex items-center justify-center text-text-secondary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
-                      {item.label}
-                    </span>
-                  </a>
-                </li>
-              ))}
+              {navLinks.map((item) => {
+                const label = t(item.key);
+                return (
+                  <li key={item.href}>
+                    {/* Full-overlay nav item — dual-span slide top→bottom on hover */}
+                    <a
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      className="group relative inline-flex items-center overflow-hidden text-3xl font-semibold"
+                    >
+                      <span aria-hidden="true" className="select-none opacity-0">
+                        {label}
+                      </span>
+                      <span className="absolute inset-0 flex items-center justify-center text-text-primary transition-transform duration-300 ease-out group-hover:translate-y-full">
+                        {label}
+                      </span>
+                      <span className="absolute inset-0 flex items-center justify-center text-text-secondary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+                        {label}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
+
+          {/* Language picker — inline row, safe inside overflow-hidden overlay */}
+          <div className="absolute bottom-12 flex flex-col items-center gap-4">
+            <span aria-hidden="true" className="w-8 h-px bg-border" />
+            <MobileLangPicker />
+          </div>
         </div>
       )}
     </>

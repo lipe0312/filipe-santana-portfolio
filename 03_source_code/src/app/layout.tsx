@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/TopBar";
 import GlobalCursor from "@/components/GlobalCursor";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -24,8 +25,10 @@ export default function RootLayout({
         {/* Film grain — fixed viewport overlay, cinematic texture across all sections */}
         <div aria-hidden="true" className="grain-overlay" />
         <GlobalCursor />
-        <TopBar />
-        {children}
+        <LanguageProvider>
+          <TopBar />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

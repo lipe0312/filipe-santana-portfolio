@@ -5,6 +5,7 @@ import { type CSSProperties, type RefObject, useState, useRef, useCallback, useE
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { getStaggerDelay } from "@/lib/utils";
 import { projects, type Project } from "@/data/projects";
+import { useTranslations } from "@/context/LanguageContext";
 
 // Loaded client-only: framer-motion + focus-trap-react never run on the server
 const ProjectModal = dynamic(() => import("@/components/modals/ProjectModal"), {
@@ -22,6 +23,7 @@ const CARD_TAG_STYLE: CSSProperties = {
 };
 
 export default function Projects() {
+  const t = useTranslations();
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [activeCardRect, setActiveCardRect] = useState<DOMRect | null>(null);
   const [activeTriggerEl, setActiveTriggerEl] = useState<HTMLElement | null>(
@@ -59,10 +61,10 @@ export default function Projects() {
       <div className="max-w-[1200px] mx-auto relative" style={{ zIndex: 1 }}>
         <div className="mb-12">
           <p className="font-mono text-text-secondary text-xs uppercase tracking-widest mb-3">
-            Selected Work
+            {t("projects.label")}
           </p>
           <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display text-text-primary">
-            Projects
+            {t("projects.heading")}
           </h2>
         </div>
 
@@ -107,6 +109,7 @@ function ProjectCard({
   isTouch: boolean;
   onOpenModal: (project: Project, rect: DOMRect, trigger: HTMLElement) => void;
 }) {
+  const t = useTranslations();
   const { ref: revealRef, isVisible } = useIntersectionObserver();
   const rowIndex = Math.floor(index / 3);
   const cardRef = useRef<HTMLDivElement | null>(null);
@@ -351,7 +354,7 @@ function ProjectCard({
                 {project.name}
               </h3>
               <p className="text-text-secondary font-sans text-sm leading-relaxed">
-                {project.oneLiner}
+                {t(project.oneLinerKey)}
               </p>
             </div>
           </div>

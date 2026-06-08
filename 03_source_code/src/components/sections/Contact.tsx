@@ -3,8 +3,10 @@
 import { type RefObject } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Mail, Link, GitBranch } from "lucide-react";
+import { useTranslations } from "@/context/LanguageContext";
 
 export default function Contact() {
+  const t = useTranslations();
   const { ref, isVisible } = useIntersectionObserver();
 
   return (
@@ -15,11 +17,10 @@ export default function Contact() {
           className={isVisible ? "reveal is-visible" : "reveal"}
         >
           <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display mb-4 text-text-primary">
-            Let&apos;s build something that matters.
+            {t("contact.heading")}
           </h2>
           <p className="text-text-secondary text-lg md:text-xl mb-12 font-sans leading-relaxed">
-            Open to collaborations, engineering challenges, and opportunities
-            where the problem is genuinely interesting.
+            {t("contact.subheading")}
           </p>
           <div className="flex flex-wrap gap-4 sm:gap-6">
             {/* Email — dual-span slide on text portion, icon stays static */}

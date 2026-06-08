@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, type CSSProperties, type RefObject } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useTranslations } from "@/context/LanguageContext";
 
-const COUNTER_TARGETS = [
-  { value: 8, label: "Projects Built" },
-  { value: 17, label: "Technologies" },
-  { value: 4, label: "Professional Roles" },
+import type { TranslationKey } from "@/i18n/translations";
+
+const COUNTER_TARGETS: { value: number; labelKey: TranslationKey }[] = [
+  { value: 8, labelKey: "about.counter.projects" },
+  { value: 17, labelKey: "about.counter.technologies" },
+  { value: 4, labelKey: "about.counter.roles" },
 ];
 
 const CORE_TECHNOLOGIES = [
@@ -29,15 +32,15 @@ const CORE_TECHNOLOGIES = [
   "TensorFlow",
 ];
 
-const SOFT_SKILLS = [
-  "Technical Leadership",
-  "Academic Research",
-  "Strategic Thinking",
-  "Sales",
-  "Complex Problem Solving",
-  "Hardware-Software Integration",
-  "Cross-layer Systems Thinking",
-  "Adaptability",
+const SOFT_SKILL_KEYS: TranslationKey[] = [
+  "about.skill.leadership",
+  "about.skill.research",
+  "about.skill.strategic",
+  "about.skill.sales",
+  "about.skill.problemSolving",
+  "about.skill.hwsw",
+  "about.skill.crossLayer",
+  "about.skill.adaptability",
 ];
 
 const TAG_STYLE: CSSProperties = {
@@ -66,6 +69,7 @@ const PIXEL_GRID_HIGHLIGHT: CSSProperties = {
 };
 
 export default function About() {
+  const t = useTranslations();
   const sectionRef = useRef<HTMLElement>(null);
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const counterRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -332,10 +336,10 @@ export default function About() {
         {/* Section header */}
         <div className="mb-16">
           <p className="font-mono text-text-secondary text-xs uppercase tracking-widest mb-3">
-            About
+            {t("about.label")}
           </p>
           <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display text-text-primary">
-            The Engineer Behind the Work
+            {t("about.heading")}
           </h2>
         </div>
 
@@ -349,9 +353,9 @@ export default function About() {
           }
           style={{ transitionDelay: "0ms" }}
         >
-          {COUNTER_TARGETS.map(function ({ label }, i) {
+          {COUNTER_TARGETS.map(function ({ labelKey }, i) {
             return (
-              <div key={label} className="text-center">
+              <div key={labelKey} className="text-center">
                 <div className="text-[clamp(2rem,4vw,3.5rem)] font-bold font-display text-text-primary leading-none mb-2">
                   <span
                     ref={function (el) {
@@ -361,7 +365,7 @@ export default function About() {
                     0
                   </span>
                 </div>
-                <p className="text-text-secondary font-sans text-sm">{label}</p>
+                <p className="text-text-secondary font-sans text-sm">{t(labelKey)}</p>
               </div>
             );
           })}
@@ -376,24 +380,10 @@ export default function About() {
           style={{ transitionDelay: "50ms" }}
         >
           <p className="text-text-secondary font-sans text-lg leading-relaxed mb-6">
-            I am a Computer Science researcher and software engineer driven by a
-            single obsession: solving problems that sit at the edge of what is
-            currently possible. My work does not live in one layer of the stack.
-            I build firmware for microcontrollers, train computer vision models
-            that run on edge hardware, and ship the full-stack web interfaces
-            that make those systems actionable. That range is not accidental, it
-            is the result of deliberately choosing the hardest problems across
-            embedded systems, applied AI, and modern web development, and seeing
-            each one through to a working solution.
+            {t("about.summary.p1")}
           </p>
           <p className="text-text-secondary font-sans text-lg leading-relaxed">
-            At UFBA, I conduct research in IoT and embedded systems as an
-            undergraduate research fellow, while also serving as a teaching
-            assistant in Computer Networks and Assembly. Beyond the academia, I
-            lead the development of production-grade projects spanning biometric
-            security, autonomous drones, and AI-powered SaaS platforms. I&apos;m
-            not looking to fit into a predefined role. I&apos;m driven by the
-            opportunity to build technology that creates meaningful impact.
+            {t("about.summary.p2")}
           </p>
         </div>
 
@@ -433,7 +423,7 @@ export default function About() {
               {/* Core Technologies card */}
               <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
                 <h3 className="text-lg font-bold font-display text-zinc-900 mb-4">
-                  Core Technologies
+                  {t("about.tech.heading")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {CORE_TECHNOLOGIES.map(function (tech, i) {
@@ -456,20 +446,20 @@ export default function About() {
               {/* Soft Skills card */}
               <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
                 <h3 className="text-lg font-bold font-display text-zinc-900 mb-4">
-                  Soft Skills
+                  {t("about.skills.heading")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {SOFT_SKILLS.map(function (skill, i) {
+                  {SOFT_SKILL_KEYS.map(function (key, i) {
                     return (
                       <span
-                        key={skill}
+                        key={key}
                         ref={function (el) {
                           tagRefs.current[CORE_TECHNOLOGIES.length + i] = el;
                         }}
                         className="font-mono text-sm bg-zinc-100 text-zinc-800 px-[10px] py-1"
                         style={TAG_STYLE}
                       >
-                        {skill}
+                        {t(key)}
                       </span>
                     );
                   })}
@@ -489,81 +479,70 @@ export default function About() {
           style={{ transitionDelay: "150ms" }}
         >
           <h3 className="text-[clamp(1.25rem,2vw,1.75rem)] font-bold font-display text-text-primary mb-8">
-            What I Actually Bring
+            {t("about.diferencial.heading")}
           </h3>
           <div className="space-y-6">
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "600ms" }}
             >
-              Here is what I actually bring to a team.{" "}
+              {t("about.diferencial.p1.a")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                I learn fast.
+                {t("about.diferencial.p1.b")}
               </span>{" "}
-              When a project demands a framework I have never touched or a
-              domain I have never worked in,{" "}
+              {t("about.diferencial.p1.c")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                I do not stall and I do not make excuses.
+                {t("about.diferencial.p1.d")}
               </span>{" "}
-              I absorb it, apply it, and start delivering. That adaptability is
-              what lets me move across layers most engineers never cross, from{" "}
+              {t("about.diferencial.p1.e")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                embedded firmware to applied AI to the web interface
+                {t("about.diferencial.p1.f")}
               </span>{" "}
-              that ties it all together.
+              {t("about.diferencial.p1.g")}
             </span>
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "680ms" }}
             >
-              But{" "}
+              {t("about.diferencial.p2.a")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                raw technical range
+                {t("about.diferencial.p2.b")}
               </span>{" "}
-              means nothing if you cannot communicate it. I can stand in front
-              of a room and translate a dense technical architecture into
-              language a business leader, an investor, or a teammate actually
-              understands. I have spent time teaching, presenting, and
-              explaining complex systems to people who do not live in code, and
-              I know how to{" "}
+              {t("about.diferencial.p2.c")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                bridge the gap between what is technically true and what a
-                decision maker needs to hear.
+                {t("about.diferencial.p2.d")}
               </span>
             </span>
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "760ms" }}
             >
-              What truly defines how I work is simpler than any skill on a list.{" "}
+              {t("about.diferencial.p3.a")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                I do not quit.
+                {t("about.diferencial.p3.b")}
               </span>{" "}
-              Hand me a problem that looks impossible and I will keep pushing
-              until it is solved, no matter what it takes. I carry a{" "}
+              {t("about.diferencial.p3.c")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                relentless drive to grow and improve
+                {t("about.diferencial.p3.d")}
               </span>
-              , but I carry it with humility and integrity. I am confident in
-              what I can build, honest about what I am still learning, and{" "}
+              {t("about.diferencial.p3.e")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                reliable when it matters most.
+                {t("about.diferencial.p3.f")}
               </span>
             </span>
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "840ms" }}
             >
-              If you need someone who will{" "}
+              {t("about.diferencial.p4.a")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                own a hard problem from the first circuit to the final
-                deployment
+                {t("about.diferencial.p4.b")}
               </span>{" "}
-              and{" "}
+              {t("about.diferencial.p4.c")}{" "}
               <span className="font-medium text-zinc-900 bg-zinc-100/80 px-1.5 py-0.5 rounded-md decoration-clone">
-                refuse to walk away until it works
+                {t("about.diferencial.p4.d")}
               </span>
-              , that is exactly who I am.
+              {t("about.diferencial.p4.e")}
             </span>
           </div>
         </div>
@@ -575,41 +554,26 @@ export default function About() {
           style={{ transitionDelay: "150ms" }}
         >
           <h3 className="text-[clamp(1.25rem,2vw,1.75rem)] font-bold font-display text-text-primary mb-8">
-            Beyond Code
+            {t("about.beyond.heading")}
           </h3>
           <div className="space-y-6">
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "600ms" }}
             >
-              When I step away from the screen, you will most likely find me
-              close to the ocean. There is something about the coastline that
-              genuinely recharges me, and living in Salvador means I would never
-              trade that. I am an extrovert at heart. I love meeting new people
-              and connecting easily, even if I might seem a little reserved at
-              first. My favorite moments are simple ones: good food at a great
-              restaurant, traveling somewhere new, and spending time with
-              family.
+              {t("about.beyond.p1")}
             </span>
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "680ms" }}
             >
-              Sports are a big part of who I am. I am a proud and devoted
-              Esporte Clube Bahia supporter, the kind who shows up to games and
-              is fully convinced he brings luck. I balance watching basketball
-              (a lifelong Steph Curry fan) and following the NFL for the sheer
-              intensity of it, with actually playing: soccer and gym keep me
-              disciplined and grounded, even if a good meal occasionally wins
-              the negotiation.
+              {t("about.beyond.p2")}
             </span>
             <span
               className="line-reveal inline-block font-sans text-lg leading-relaxed"
               style={{ transitionDelay: "760ms" }}
             >
-              At the end of the day, I am someone who collects experiences more
-              than things. New places, new people, new problems worth solving:
-              that is what drives me both inside and outside the code.
+              {t("about.beyond.p3")}
             </span>
           </div>
         </div>

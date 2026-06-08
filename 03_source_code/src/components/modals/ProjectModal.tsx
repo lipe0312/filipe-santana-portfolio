@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import FocusTrap from "focus-trap-react";
 import type { Project } from "@/data/projects";
+import { useTranslations } from "@/context/LanguageContext";
 
 export interface ProjectModalProps {
   project: Project | null;
@@ -21,6 +22,7 @@ const MODAL_TAG_STYLE: React.CSSProperties = {
 function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const t = useTranslations();
 
   useEffect(() => {
     setPortalTarget(document.body);
@@ -154,7 +156,7 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                     {/* Status badge */}
                     <div className="mb-4">
                       <span className="font-mono text-[0.75rem] text-zinc-500 border border-zinc-200 rounded-md px-2.5 py-1">
-                        [ {project.status} ]
+                        [ {t(project.statusKey)} ]
                       </span>
                     </div>
 
@@ -193,20 +195,20 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                     {/* The Problem */}
                     <section className="mb-10">
                       <p className="font-mono text-zinc-500 text-xs uppercase tracking-widest mb-3">
-                        The Problem
+                        {t("modal.problem")}
                       </p>
                       <p className="font-sans text-zinc-700 text-[0.9375rem] desktop:text-base leading-[1.7]">
-                        {project.theProblem}
+                        {t(project.problemKey)}
                       </p>
                     </section>
 
                     {/* The Solution */}
                     <section className="mb-10">
                       <p className="font-mono text-zinc-500 text-xs uppercase tracking-widest mb-3">
-                        The Solution
+                        {t("modal.solution")}
                       </p>
                       <p className="font-sans text-zinc-700 text-[0.9375rem] desktop:text-base leading-[1.7]">
-                        {project.theSolution}
+                        {t(project.solutionKey)}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-5">
                         {project.techStack.map(function(tech, i) {
@@ -228,7 +230,7 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                     {project.externalLinks.length > 0 && (
                       <section>
                         <p className="font-mono text-zinc-500 text-xs uppercase tracking-widest mb-4">
-                          Links
+                          {t("modal.links")}
                         </p>
                         <div className="flex flex-col gap-3">
                           {project.externalLinks.map((link) => (

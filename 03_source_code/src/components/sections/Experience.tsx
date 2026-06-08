@@ -3,65 +3,61 @@
 import { useState, type RefObject } from "react";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { getStaggerDelay } from "@/lib/utils";
+import { useTranslations } from "@/context/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 
-const experiences = [
+interface ExperienceData {
+  roleKey: TranslationKey;
+  companyKey: TranslationKey;
+  locationKey: TranslationKey;
+  timelineKey: TranslationKey;
+  summaryKey: TranslationKey;
+  achievementKeys: TranslationKey[];
+}
+
+const experiences: ExperienceData[] = [
   {
-    role: "Undergraduate Research Fellow — Embedded Systems & IoT",
-    company: "Federal University of Bahia (UFBA)",
-    location: "Salvador, BA",
-    timeline: "2025 — Present",
-    summary:
-      "Conducting applied research at the intersection of embedded hardware and intelligent automation, designing systems that integrate microcontrollers, sensors, and computer vision into cohesive, production-grade solutions.",
-    achievements: [
-      "Engineered hardware-software integration pipelines using ESP32 and industrial communication protocols, enabling real-time data capture and automated decision-making at the edge.",
-      "Applied computer vision systems to automate visual inspection and environmental monitoring tasks, reducing the need for manual intervention in controlled environments.",
-    ],
+    roleKey: "experience.role1.role",
+    companyKey: "experience.role1.company",
+    locationKey: "experience.role1.location",
+    timelineKey: "experience.role1.timeline",
+    summaryKey: "experience.role1.summary",
+    achievementKeys: ["experience.role1.a1", "experience.role1.a2"],
   },
   {
-    role: "Academic Teaching Assistant — Computer Networks & Assembly",
-    company: "Federal University of Bahia (UFBA)",
-    location: "Salvador, BA",
-    timeline: "2025 — 2026",
-    summary:
-      "Selected to support undergraduate instruction across two technically demanding disciplines, bridging the gap between low-level architecture and modern networking concepts for a undergraduate cohort.",
-    achievements: [
-      "Led practical sessions in Assembly programming, guiding students through memory management, register operations, and CPU-level logic with measurable improvements in class performance.",
-      "Delivered support in Computer Networks, reinforcing protocol architecture, infrastructure design, and hands-on packet analysis for a cohort of 40+ students.",
-    ],
+    roleKey: "experience.role2.role",
+    companyKey: "experience.role2.company",
+    locationKey: "experience.role2.location",
+    timelineKey: "experience.role2.timeline",
+    summaryKey: "experience.role2.summary",
+    achievementKeys: ["experience.role2.a1", "experience.role2.a2"],
   },
   {
-    role: "Systems Developer — Smart Lock Project",
-    company: "Innovative Solutions Laboratory (UNIFACS)",
-    location: "Salvador, BA",
-    timeline: "2025",
-    summary:
-      "Leading the full technical development of an enterprise-grade physical access control system, architecting a dual-validation security pipeline that merges NFC hardware with real-time computer vision.",
-    achievements: [
-      "Architected a two-factor authentication system combining mobile NFC reading and facial recognition via OpenCV, delivering a security standard comparable to commercial access control products.",
-      "Implemented real-time MQTT communication between the management software and ESP32 microcontrollers over Wi-Fi, achieving sub-second lock actuation response times.",
-      "Owned the full development lifecycle — from circuit design and firmware to the backend management interface — as the sole technical lead on the project.",
-    ],
+    roleKey: "experience.role3.role",
+    companyKey: "experience.role3.company",
+    locationKey: "experience.role3.location",
+    timelineKey: "experience.role3.timeline",
+    summaryKey: "experience.role3.summary",
+    achievementKeys: ["experience.role3.a1", "experience.role3.a2", "experience.role3.a3"],
   },
   {
-    role: "Full Stack Developer — Freelance",
-    company: "Independent Clients",
-    location: "Remote",
-    timeline: "2024 — Present",
-    summary:
-      "Designing and delivering high-performance web products for clients, with a focus on conversion-optimized interfaces and reliable data infrastructure.",
-    achievements: [
-      "Built and shipped production web applications using React and Vite, achieving fast load times and fully responsive layouts across devices.",
-      "Integrated MySQL database layers into client projects, ensuring structured, scalable data management for business-critical operations.",
-    ],
+    roleKey: "experience.role4.role",
+    companyKey: "experience.role4.company",
+    locationKey: "experience.role4.location",
+    timelineKey: "experience.role4.timeline",
+    summaryKey: "experience.role4.summary",
+    achievementKeys: ["experience.role4.a1", "experience.role4.a2"],
   },
 ];
 
 export default function Experience() {
+  const t = useTranslations();
+
   return (
     <section id="experience" className="bg-white relative px-6 py-24">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-bold font-display mb-12 text-text-primary">
-          Experience
+          {t("experience.heading")}
         </h2>
         <div className="space-y-12">
           {experiences.map((exp, index) => {
@@ -85,11 +81,12 @@ function ExperienceItem({
   experience,
   index,
 }: {
-  experience: (typeof experiences)[0];
+  experience: ExperienceData;
   index: number;
 }) {
   const { ref, isVisible } = useIntersectionObserver();
   const [isExpanded, setIsExpanded] = useState(false);
+  const t = useTranslations();
 
   return (
     <div
@@ -103,15 +100,15 @@ function ExperienceItem({
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-3">
         <div>
           <h3 className="text-xl md:text-2xl font-bold font-display text-text-primary">
-            {experience.role}
+            {t(experience.roleKey)}
           </h3>
           <p className="text-text-secondary font-sans">
-            {experience.company} · {experience.location}
+            {t(experience.companyKey)} · {t(experience.locationKey)}
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <p className="text-text-secondary font-mono text-sm">
-            {experience.timeline}
+            {t(experience.timelineKey)}
           </p>
           {/* Mobile-only expand indicator — hidden on md+ where hover takes over */}
           <svg
@@ -133,7 +130,7 @@ function ExperienceItem({
       </div>
 
       <p className="text-text-secondary font-sans mb-4 leading-relaxed">
-        {experience.summary}
+        {t(experience.summaryKey)}
       </p>
 
       {/* CSS grid trick: grid-rows 0fr → 1fr animates height without fixed px */}
@@ -142,13 +139,13 @@ function ExperienceItem({
       >
         <div className="overflow-hidden">
           <ul className="space-y-2 pb-1">
-            {experience.achievements.map((achievement, i) => {
+            {experience.achievementKeys.map((key, i) => {
               return (
                 <li
                   key={i}
                   className="text-text-secondary font-sans leading-relaxed list-disc list-inside"
                 >
-                  {achievement}
+                  {t(key)}
                 </li>
               );
             })}

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "@/context/LanguageContext";
 
 export default function Hero() {
+  const t = useTranslations();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -74,13 +76,12 @@ export default function Hero() {
         style={{ zIndex: 1 }}
       >
         <h1 className="text-[clamp(2.5rem,5vw,5rem)] font-bold leading-tight font-display mb-4">
-          Building systems that think: from the edge device to the interface.
+          {t("hero.headline")}
         </h1>
         <div className="text-text-secondary text-lg md:text-xl mb-8 font-sans">
           <p className="mb-2">Filipe Santana</p>
           <p>
-            Computer Science Researcher & Software Engineer based in Salvador,
-            BA.
+            {t("hero.subtitle.role")}
           </p>
         </div>
         <div className="flex flex-wrap gap-4">
@@ -91,13 +92,13 @@ export default function Hero() {
             className="group relative inline-flex items-center justify-center overflow-hidden px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-300 bg-zinc-900 border-zinc-900 hover:bg-transparent hover:border-zinc-900 font-sans"
           >
             <span aria-hidden="true" className="select-none opacity-0">
-              View Projects
+              {t("hero.cta.projects")}
             </span>
             <span className="absolute inset-0 flex items-center justify-center text-white transition-transform duration-300 ease-out group-hover:translate-y-full">
-              View Projects
+              {t("hero.cta.projects")}
             </span>
             <span className="absolute inset-0 flex items-center justify-center text-zinc-900 -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
-              View Projects
+              {t("hero.cta.projects")}
             </span>
           </a>
           {/* How can I help — light border, text slides BOTTOM → TOP on hover */}
@@ -107,13 +108,13 @@ export default function Hero() {
             className="group relative inline-flex items-center justify-center overflow-hidden px-6 py-3 rounded-lg text-sm font-medium border transition-colors duration-300 bg-transparent border-zinc-900 hover:bg-zinc-900 font-sans"
           >
             <span aria-hidden="true" className="select-none opacity-0">
-              How can I help
+              {t("hero.cta.help")}
             </span>
             <span className="absolute inset-0 flex items-center justify-center text-zinc-900 transition-transform duration-300 ease-out group-hover:-translate-y-full">
-              How can I help
+              {t("hero.cta.help")}
             </span>
             <span className="absolute inset-0 flex items-center justify-center text-white translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
-              How can I help
+              {t("hero.cta.help")}
             </span>
           </a>
         </div>

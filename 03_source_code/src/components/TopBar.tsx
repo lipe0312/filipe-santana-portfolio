@@ -2,16 +2,20 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import MobileNav from "./MobileNav";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslations } from "@/context/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 
-const navLinks = [
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "About", href: "#about" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
+const navLinks: Array<{ key: TranslationKey; href: string }> = [
+  { key: "nav.projects", href: "#projects" },
+  { key: "nav.experience", href: "#experience" },
+  { key: "nav.about", href: "#about" },
+  { key: "nav.gallery", href: "#gallery" },
+  { key: "nav.contact", href: "#contact" },
 ];
 
 export default function TopBar() {
+  const t = useTranslations();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [activeSection, setActiveSection] = useState(
@@ -135,45 +139,62 @@ export default function TopBar() {
           </span>
         </a>
 
-        <nav aria-label="Primary navigation" className="hidden desktop:block">
-          <ul className="flex items-center gap-6 text-sm font-medium font-sans">
-            {navItems.map((item) => {
-              const sectionId = item.href.substring(1);
-              const isActive = activeSection === sectionId;
+        {/* Right side: nav + lang switcher + mobile controls */}
+        <div className="flex items-center gap-4 min-w-0">
+          <nav aria-label="Primary navigation" className="hidden desktop:block">
+            <ul className="flex items-center gap-6 text-sm font-medium font-sans">
+              {navItems.map((item) => {
+                const sectionId = item.href.substring(1);
+                const isActive = activeSection === sectionId;
+                const label = t(item.key);
 
-              return (
-                <li key={item.href}>
-                  {/* Nav link — dual-span slide top→bottom on hover */}
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className={
-                      "group relative inline-flex items-center overflow-hidden " +
-                      (isActive ? "text-text-primary" : "text-text-secondary")
-                    }
-                  >
-                    <span aria-hidden="true" className="select-none opacity-0">
-                      {item.label}
-                    </span>
-                    <span
+                return (
+                  <li key={item.href}>
+                    {/* Nav link — dual-span slide top→bottom on hover */}
+                    <a
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
                       className={
-                        "absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out group-hover:translate-y-full " +
+                        "group relative inline-flex items-center overflow-hidden " +
                         (isActive ? "text-text-primary" : "text-text-secondary")
                       }
                     >
-                      {item.label}
-                    </span>
-                    <span className="absolute inset-0 flex items-center justify-center text-text-primary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
-                      {item.label}
-                    </span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                      <span aria-hidden="true" className="select-none opacity-0">
+                        {label}
+                      </span>
+                      <span
+                        className={
+                          "absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out group-hover:translate-y-full " +
+                          (isActive ? "text-text-primary" : "text-text-secondary")
+                        }
+                      >
+                        {label}
+                      </span>
+                      <span className="absolute inset-0 flex items-center justify-center text-text-primary -translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0">
+                        {label}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-        <MobileNav />
+          {/* Divider — desktop only */}
+          <span aria-hidden="true" className="hidden desktop:block w-px h-4 bg-border shrink-0" />
+
+          {/* Dropdown switcher — desktop (with label) */}
+          <div className="hidden desktop:flex">
+            <LanguageSwitcher />
+          </div>
+
+          {/* Dropdown switcher — mobile (flag only, dropdown right-aligned) */}
+          <div className="flex desktop:hidden">
+            <LanguageSwitcher compact />
+          </div>
+
+          <MobileNav />
+        </div>
       </div>
     </header>
   );
