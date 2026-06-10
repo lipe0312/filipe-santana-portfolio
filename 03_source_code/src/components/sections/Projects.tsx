@@ -29,10 +29,10 @@ export default function Projects() {
   const [activeTriggerEl, setActiveTriggerEl] = useState<HTMLElement | null>(
     null,
   );
-  const [isTouch, setIsTouch] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
 
   useEffect(() => {
-    setIsTouch(window.matchMedia("(hover: none)").matches);
+    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
   }, []);
 
   const handleOpenModal = useCallback(
@@ -54,8 +54,8 @@ export default function Projects() {
       className="bg-white px-6 py-24 relative"
     >
       <div aria-hidden="true" className="blob-bg">
-        <div className="blob-1 absolute rounded-full will-change-transform" style={{ width: "600px", height: "600px", top: "-10%", left: "-8%", opacity: 0.28, filter: "blur(90px)", background: "#CBD5E1" }} />
-        <div className="blob-2 absolute rounded-full will-change-transform" style={{ width: "500px", height: "500px", bottom: "5%", right: "5%", opacity: 0.22, filter: "blur(100px)", background: "#D1D5DB" }} />
+        <div className="blob-1 absolute rounded-full" style={{ width: "600px", height: "600px", top: "-10%", left: "-8%", opacity: 0.28, filter: "blur(90px)", background: "#CBD5E1" }} />
+        <div className="blob-2 absolute rounded-full" style={{ width: "500px", height: "500px", bottom: "5%", right: "5%", opacity: 0.22, filter: "blur(100px)", background: "#D1D5DB" }} />
       </div>
       <div aria-hidden="true" className="pointer-events-none absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white to-transparent" />
       <div className="max-w-[1200px] mx-auto relative" style={{ zIndex: 1 }}>
@@ -74,7 +74,7 @@ export default function Projects() {
               key={project.name}
               project={project}
               index={index}
-              isTouch={isTouch}
+              isTouch={isTouchDevice}
               onOpenModal={handleOpenModal}
             />
           ))}
@@ -117,15 +117,17 @@ function ProjectCard({
   const timeUpdateHandlerRef = useRef<(() => void) | null>(null);
   const tagRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const [leftImageError, setLeftImageError] = useState(false);
   const [rightImageError, setRightImageError] = useState(false);
   const [singleImageError, setSingleImageError] = useState(false);
 
   const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
     if (videoRef.current) {
       const video = videoRef.current;
 
-      // Set up time update listener to loop within hoverStartTime and hoverEndTime
       const handleTimeUpdate = () => {
         if (
           project.hoverEndTime !== undefined &&
@@ -138,16 +140,17 @@ function ProjectCard({
       timeUpdateHandlerRef.current = handleTimeUpdate;
       video.addEventListener("timeupdate", handleTimeUpdate);
 
-      // Seek to start time
+      video.load();
       if (project.hoverStartTime !== undefined) {
         video.currentTime = project.hoverStartTime;
       }
-
       video.play().catch(() => {});
     }
   }, [project.hoverStartTime, project.hoverEndTime]);
 
   const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    setVideoReady(false);
     if (videoRef.current) {
       const video = videoRef.current;
       if (timeUpdateHandlerRef.current) {
@@ -270,19 +273,46 @@ function ProjectCard({
 
           {/* Media layer */}
           <div
-            className={"absolute inset-0 transition-opacity duration-300 ease-out " + (isTouch ? "opacity-[0.3]" : "opacity-0 group-hover:opacity-100")}
+            className={
+              "absolute inset-0 transition-opacity duration-300 ease-out " +
+              (isTouch
+                ? "opacity-[0.3]"
+                : isVideo
+                ? "opacity-100"
+                : "opacity-0 group-hover:opacity-100")
+            }
           >
-            {isVideo ? (
-              isTouch ? null : (
+            {isTouch ? (
+              // Mobile: static image only, no video mounted
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={project.heroImage ?? project.heroMediaPath ?? ""}
+                alt=""
+                loading="lazy"
+                className="w-full h-full object-cover"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
+              />
+            ) : isVideo ? (
+              // Desktop: thumbnail always visible, video fades in on hover after canPlay
+              <div className="relative w-full h-full overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.heroImage ?? ""}
+                  alt=""
+                  className={"absolute inset-0 w-full h-full object-cover transition-opacity duration-300 " + (isHovered && videoReady ? "opacity-0" : "opacity-100")}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                />
                 <video
                   ref={videoRef}
                   src={project.heroMediaPath}
                   muted
+                  loop
                   playsInline
                   preload="none"
-                  className="w-full h-full object-cover transition-transform duration-300 ease-out scale-100 group-hover:scale-105"
+                  onCanPlay={() => setVideoReady(true)}
+                  className={"absolute inset-0 w-full h-full object-cover transition-opacity duration-300 " + (isHovered && videoReady ? "opacity-100" : "opacity-0")}
                 />
-              )
+              </div>
             ) : project.heroMediaType === "side-by-side" &&
               project.heroMediaPaths ? (
               <div className="flex w-full h-full gap-2 p-2">
@@ -317,7 +347,7 @@ function ProjectCard({
                 <img
                   src={project.heroMediaPath}
                   alt=""
-                  className={"w-full h-full object-cover transition-transform duration-300 ease-out " + (isTouch ? "" : "scale-100 group-hover:scale-105")}
+                  className="w-full h-full object-cover transition-transform duration-300 ease-out scale-100 group-hover:scale-105"
                   onError={() => setSingleImageError(true)}
                 />
               )

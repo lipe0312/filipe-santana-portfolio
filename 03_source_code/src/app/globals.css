@@ -179,6 +179,22 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+@media (max-width: 767px) {
+  body {
+    background-color: var(--color-white);
+  }
+
+  .blob-1,
+  .blob-2,
+  .blob-bg > * {
+    filter: blur(40px) !important;
+    will-change: auto !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;

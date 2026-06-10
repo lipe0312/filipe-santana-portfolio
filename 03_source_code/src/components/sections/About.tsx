@@ -303,7 +303,7 @@ export default function About() {
       {/* Blob background — slow-sweeping ambient wave */}
       <div aria-hidden="true" className="blob-bg">
         <div
-          className="blob-1 absolute rounded-full bg-zinc-200 will-change-transform"
+          className="blob-1 absolute rounded-full bg-zinc-200"
           style={{
             width: "700px",
             height: "700px",
@@ -314,7 +314,7 @@ export default function About() {
           }}
         />
         <div
-          className="blob-2 absolute rounded-full bg-indigo-100 will-change-transform"
+          className="blob-2 absolute rounded-full bg-indigo-100"
           style={{
             width: "600px",
             height: "600px",

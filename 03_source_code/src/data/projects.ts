@@ -20,6 +20,7 @@ export interface Project {
   techStack: string[];
   statusKey: TranslationKey;
   date: string;
+  heroImage?: string;
   heroMediaPath?: string;
   heroMediaType?: "image" | "video" | "side-by-side";
   heroMediaPaths?: {

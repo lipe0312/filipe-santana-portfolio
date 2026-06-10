@@ -24,7 +24,7 @@ export default function Hero() {
       {/* Ambient blobs — absolute so they stay inside the white Hero */}
       <div aria-hidden="true" className="blob-bg">
         <div
-          className="blob-1 absolute rounded-full will-change-transform"
+          className="blob-1 absolute rounded-full"
           style={{
             width: "720px",
             height: "720px",
@@ -36,7 +36,7 @@ export default function Hero() {
           }}
         />
         <div
-          className="blob-2 absolute rounded-full will-change-transform"
+          className="blob-2 absolute rounded-full"
           style={{
             width: "600px",
             height: "600px",
