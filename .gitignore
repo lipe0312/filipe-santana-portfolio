@@ -28,8 +28,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Local env
+# Local env — all variants
+.env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.test
+.env.test.local
 .env*.local
+*.env
 
 # Vercel
 .vercel
