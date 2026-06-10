@@ -10,8 +10,31 @@ import { LanguageProvider } from "@/context/LanguageContext";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Filipe Santana | Portfolio",
-  description: "Portfolio showcasing Filipe Santana's projects and work",
+  title: "Filipe Santana",
+  description: "Computer Science Researcher & Software Engineer based in Salvador, BA.",
+  metadataBase: new URL("https://filipe-santana-portfolio.vercel.app"),
+  openGraph: {
+    title: "Filipe Santana — Portfolio",
+    description: "Building systems that think: from the edge device to the interface.",
+    url: "https://filipe-santana-portfolio.vercel.app",
+    siteName: "Filipe Santana",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Filipe Santana — Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Filipe Santana — Portfolio",
+    description: "Building systems that think: from the edge device to the interface.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
