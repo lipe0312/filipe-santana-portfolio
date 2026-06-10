@@ -3,6 +3,7 @@
 # Strategy and design assets — kept out of git (large binary/design files)
 01_strategy/
 02_design_assets/
+new_midias/
 
 # AI agent artifacts and notes
 .ai/
