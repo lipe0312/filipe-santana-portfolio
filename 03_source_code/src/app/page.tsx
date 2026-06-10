@@ -7,9 +7,9 @@ import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="relative w-full overflow-x-clip min-h-screen">
       {/* Fixed ambient blob background — sits behind all sections */}
-      <div aria-hidden="true" className="fixed blob-bg">
+      <div aria-hidden="true" className="blob-bg" style={{ position: "fixed" }}>
         <div className="absolute w-[800px] h-[800px] rounded-full bg-soft-slate opacity-80 blur-[180px] will-change-transform animate-blob-slow top-[-15%] left-[-10%]" />
         <div className="absolute w-[700px] h-[700px] rounded-full bg-soft-slate opacity-70 blur-[160px] will-change-transform animate-blob-mid top-[-5%] right-[-15%]" />
         <div className="absolute w-[600px] h-[600px] rounded-full bg-alabaster opacity-60 blur-[140px] will-change-transform animate-blob-fast bottom-[10%] left-[25%]" />

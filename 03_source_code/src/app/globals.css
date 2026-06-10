@@ -23,11 +23,26 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-background-base);
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   color: var(--color-text-primary);
   background-color: var(--color-background-base);
+  overscroll-behavior-x: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 .reveal {

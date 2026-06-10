@@ -179,7 +179,7 @@ export default function Gallery() {
     <section
       id="gallery"
       ref={sectionRef as RefObject<HTMLElement>}
-      className="bg-white relative overflow-hidden px-6 py-24"
+      className="bg-white relative overflow-hidden py-24"
     >
       {/* Top seam */}
       <div
@@ -191,7 +191,7 @@ export default function Gallery() {
       <div
         className={
           (isVisible ? "reveal is-visible" : "reveal") +
-          " max-w-5xl mx-auto mb-12"
+          " max-w-5xl mx-auto mb-12 px-6"
         }
         style={{ transitionDelay: "0ms" }}
       >
@@ -205,7 +205,7 @@ export default function Gallery() {
           Inner div:  the actual scroll container (overflow-x-auto, no scrollbar)
           Auto-scroll runs via RAF; trackpad wheel pauses it for 3s then resumes.
       ──────────────────────────────────────────────────────────────────────── */}
-      <div className="hidden md:block -mx-6" style={FADE_MASK}>
+      <div className="hidden md:block" style={FADE_MASK}>
         <div
           ref={desktopRef}
           className="gallery-desktop overflow-x-auto flex flex-row items-center gap-8"
@@ -269,7 +269,7 @@ export default function Gallery() {
       {/* ── Mobile: horizontal snap scroll ────────────────────────────────────── */}
       <div
         ref={mobileContainerRef}
-        className="gallery-mobile md:hidden flex overflow-x-auto -mx-6"
+        className="gallery-mobile md:hidden flex overflow-x-auto"
         style={
           {
             gap: "12px",

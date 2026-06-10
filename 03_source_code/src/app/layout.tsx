@@ -27,7 +27,9 @@ export default function RootLayout({
         <GlobalCursor />
         <LanguageProvider>
           <TopBar />
-          {children}
+          <div className="relative flex flex-col min-h-screen overflow-x-hidden">
+            {children}
+          </div>
         </LanguageProvider>
       </body>
     </html>

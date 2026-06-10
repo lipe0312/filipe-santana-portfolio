@@ -116,7 +116,7 @@ export default function TopBar() {
   return (
     <header
       className={
-        "fixed inset-x-0 top-0 z-50 h-14 transform transition-transform duration-300 ease-out " +
+        "fixed inset-x-0 top-0 z-50 h-14 w-full max-w-full transform transition-transform duration-300 ease-out " +
         (isHidden ? "-translate-y-full" : "translate-y-0") +
         " " +
         (isScrolled
