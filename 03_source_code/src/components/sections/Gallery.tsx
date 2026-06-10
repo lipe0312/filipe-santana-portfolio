@@ -19,47 +19,19 @@ type GalleryItem = ImageItem | VideoItem;
 // ── Data ──────────────────────────────────────────────────────────────────────
 // Videos are interspersed so they appear roughly every ~8 items in the loop.
 const GALLERY_ITEMS: GalleryItem[] = [
-  { kind: "image", src: "/images/_gallery/1.png", alt: "Photo 1" },
-  { kind: "image", src: "/images/_gallery/2.png", alt: "Photo 2" },
-  { kind: "image", src: "/images/_gallery/3.png", alt: "Photo 3" },
-  {
-    kind: "video",
-    webm: "/videos/_gallery/v1.webm",
-    mov: "/videos/_gallery/v1.MOV",
-    alt: "Video 1",
-  },
-  { kind: "image", src: "/images/_gallery/4.png", alt: "Photo 4" },
-  { kind: "image", src: "/images/_gallery/6.png", alt: "Photo 6" },
-  { kind: "image", src: "/images/_gallery/7.png", alt: "Photo 7" },
-  { kind: "image", src: "/images/_gallery/8.png", alt: "Photo 8" },
-  { kind: "image", src: "/images/_gallery/9.png", alt: "Photo 9" },
-  {
-    kind: "video",
-    webm: "/videos/_gallery/v2.webm",
-    mov: "/videos/_gallery/v2.MOV",
-    alt: "Video 2",
-  },
-  { kind: "image", src: "/images/_gallery/10.png", alt: "Photo 10" },
-  { kind: "image", src: "/images/_gallery/11.png", alt: "Photo 11" },
-  { kind: "image", src: "/images/_gallery/12.png", alt: "Photo 12" },
-  { kind: "image", src: "/images/_gallery/13.png", alt: "Photo 13" },
-  { kind: "image", src: "/images/_gallery/14.png", alt: "Photo 14" },
-  { kind: "image", src: "/images/_gallery/15.png", alt: "Photo 15" },
-  { kind: "image", src: "/images/_gallery/16.png", alt: "Photo 16" },
-  { kind: "image", src: "/images/_gallery/17.png", alt: "Photo 17" },
-  { kind: "image", src: "/images/_gallery/18.png", alt: "Photo 18" },
-  { kind: "image", src: "/images/_gallery/19.png", alt: "Photo 19" },
-  { kind: "image", src: "/images/_gallery/20.png", alt: "Photo 20" },
-  { kind: "image", src: "/images/_gallery/21.png", alt: "Photo 21" },
-  { kind: "image", src: "/images/_gallery/22.png", alt: "Photo 22" },
+  { kind: "image", src: "/images/_gallery/1.webp", alt: "Photo 1" },
+  { kind: "image", src: "/images/_gallery/12.webp", alt: "Photo 12" },
+  { kind: "image", src: "/images/_gallery/17.webp", alt: "Photo 17" },
+  { kind: "image", src: "/images/_gallery/18.webp", alt: "Photo 18" },
+  { kind: "image", src: "/images/_gallery/21.webp", alt: "Photo 21" },
 ];
 
 // Doubled so scrollLeft can reset at the halfway point for a seamless loop
 const MARQUEE_ITEMS: GalleryItem[] = [...GALLERY_ITEMS, ...GALLERY_ITEMS];
 
 // px per animation frame at ~60fps.
-// 0.5px/frame × 60fps × 240s = 7200px per full cycle — sized for this gallery.
-const SCROLL_SPEED = 0.5;
+// 0.25px/frame × 60fps × 240s = 3600px per full cycle — sized for this gallery.
+const SCROLL_SPEED = 0.25;
 
 const MOBILE_W = 240;
 const MOBILE_H = 300;
