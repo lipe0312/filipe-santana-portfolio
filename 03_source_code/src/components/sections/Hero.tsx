@@ -1,27 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "@/context/LanguageContext";
 
 export default function Hero() {
   const t = useTranslations();
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const handleLoad = () => {
-      setIsLoaded(true);
-    };
-
-    if (
-      document.readyState === "complete" ||
-      document.readyState === "interactive"
-    ) {
-      requestAnimationFrame(handleLoad);
-    } else {
-      window.addEventListener("DOMContentLoaded", handleLoad);
-      return () => window.removeEventListener("DOMContentLoaded", handleLoad);
-    }
-  }, []);
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -67,14 +49,7 @@ export default function Hero() {
         />
       </div>
 
-      <div
-        className={
-          isLoaded
-            ? "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-100"
-            : "relative max-w-5xl w-full transition-opacity duration-500 ease-out opacity-0"
-        }
-        style={{ zIndex: 1 }}
-      >
+      <div className="relative max-w-5xl w-full" style={{ zIndex: 1 }}>
         <h1 className="text-[clamp(2.5rem,5vw,5rem)] font-bold leading-tight font-display mb-4">
           {t("hero.headline")}
         </h1>

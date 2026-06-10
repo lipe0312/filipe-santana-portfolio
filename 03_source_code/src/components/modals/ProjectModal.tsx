@@ -175,6 +175,7 @@ function ProjectModal({ project, onClose, triggerElement }: ProjectModalProps) {
                           src={project.heroMediaPath}
                           controls
                           playsInline
+                          preload="none"
                           className="w-full h-full object-cover"
                         />
                       ) : (

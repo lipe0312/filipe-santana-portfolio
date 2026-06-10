@@ -273,14 +273,16 @@ function ProjectCard({
             className={"absolute inset-0 transition-opacity duration-300 ease-out " + (isTouch ? "opacity-[0.3]" : "opacity-0 group-hover:opacity-100")}
           >
             {isVideo ? (
-              <video
-                ref={videoRef}
-                src={project.heroMediaPath}
-                muted
-                playsInline
-                preload="none"
-                className={"w-full h-full object-cover transition-transform duration-300 ease-out " + (isTouch ? "" : "scale-100 group-hover:scale-105")}
-              />
+              isTouch ? null : (
+                <video
+                  ref={videoRef}
+                  src={project.heroMediaPath}
+                  muted
+                  playsInline
+                  preload="none"
+                  className="w-full h-full object-cover transition-transform duration-300 ease-out scale-100 group-hover:scale-105"
+                />
+              )
             ) : project.heroMediaType === "side-by-side" &&
               project.heroMediaPaths ? (
               <div className="flex w-full h-full gap-2 p-2">
